@@ -1,0 +1,183 @@
+package com.luthtan.eye_beacon_android.features.dashboard
+
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.RemoteException
+import android.util.Log
+import androidx.fragment.app.viewModels
+import com.google.firebase.database.DatabaseReference
+import com.luthtan.eye_beacon_android.base.BaseFragment
+import com.luthtan.eye_beacon_android.databinding.FragmentDashboardBinding
+import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
+import com.luthtan.eye_beacon_android.features.dashboard.adapter.DashboardAdapter
+import com.luthtan.eye_beacon_android.features.login.AlertLocationDialog
+import com.luthtan.simplebleproject.data.repository.PreferencesRepository
+import io.reactivex.disposables.Disposable
+import org.altbeacon.beacon.*
+import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+
+class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewModel>(), BeaconConsumer,
+    RangeNotifier {
+
+    private val database: DatabaseReference by inject()
+
+    private val preferences: PreferencesRepository by inject()
+
+    override val viewModel: DashboardViewModel by viewModels()
+
+    override val binding: FragmentDashboardBinding by lazy {
+        FragmentDashboardBinding.inflate(layoutInflater)
+    }
+
+    private val dashboardAdapter by lazy {
+        DashboardAdapter()
+    }
+
+    private val bluetoothState: BluetoothManager by inject()
+
+    private var isScanning = false
+        set(value) {
+            field = value
+            requireActivity().runOnUiThread { }
+        }
+
+    private var beaconManager: BeaconManager? = null
+    private var bluetoothStateDisposable: Disposable? = null
+
+    override fun onInitViews() {
+        super.onInitViews()
+
+        setBluetooth()
+
+        binding.rvDashboardHistory.adapter = dashboardAdapter
+
+    }
+
+    override fun onInitObservers() {
+        super.onInitObservers()
+
+        /*viewModel.getAllData.observe(this, { list ->
+            if (list != null) {
+
+            }
+        })*/
+
+    }
+
+    private fun setBluetooth() {
+        beaconManager = get()
+    }
+
+    private fun unbindBeaconManager() {
+        if (beaconManager?.isBound(this) == true) {
+            beaconManager!!.backgroundMode = true
+            beaconManager!!.removeRangeNotifier(this)
+        }
+    }
+
+    override fun onBeaconServiceConnect() {
+        beaconManager?.addRangeNotifier(this)
+        try {
+            beaconManager?.startRangingBeaconsInRegion(
+                Region(
+                    "com.luthtan.eye_beacon_android",
+                    null,
+                    null,
+                    null
+                )
+            )
+        } catch (e: RemoteException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun getApplicationContext(): Context {
+        return requireContext()
+    }
+
+    override fun unbindService(p0: ServiceConnection) {
+        requireActivity().unbindService(p0)
+    }
+
+    override fun bindService(intent: Intent?, serviceConnection: ServiceConnection, i: Int): Boolean {
+        return requireActivity().bindService(intent, serviceConnection, i)
+    }
+
+    private fun storeBeaconsAround(beacons: Collection<Beacon>) {
+        dashboardAdapter.setBleLogHistory(beacons.toMutableList())
+        beacons.forEachIndexed { index, beacon ->
+            if (beacon.serviceUuid == 0xfeaa && beacon.beaconTypeCode == 0x10) {
+                val url = UrlBeaconUrlCompressor.uncompress(beacon.id1.toByteArray())
+                showToast(url)
+            }
+        }
+    }
+
+    override fun onRequestResult(granted: Boolean) {
+        super.onRequestResult(granted)
+        if (!granted) {
+            AlertLocationDialog.showRequestPermission(requireContext()) {
+                permissionRequestLauncher.launch(arrayOf(PERMISSION_LOCATION_FINE))
+            }
+        }
+    }
+
+    private fun startScan() {
+        if (!bluetoothState.isEnabled() || beaconManager == null) {
+            bluetoothState.enable()
+        }
+
+        if (beaconManager?.isBound(this) != true) {
+            beaconManager?.bind(this)
+            beaconManager?.backgroundMode = false
+            Log.d(TAG, "Switch from background mode!")
+        }
+
+        isScanning = true
+    }
+
+    private fun stopScan() {
+        unbindBeaconManager()
+        isScanning = false
+    }
+
+    enum class BluetoothState{
+        STATE_OFF,
+        STATE_TURNING_OFF,
+        STATE_ON,
+        STATE_TURNING_ON,
+    }
+
+    companion object{
+        private val TAG = "DashboardFragment"
+    }
+
+    override fun didRangeBeaconsInRegion(collection: MutableCollection<Beacon>?, p1: Region?) {
+        if (isScanning) {
+            if (collection != null) {
+                storeBeaconsAround(collection)
+            }
+        }
+    }
+
+    override fun onInitPause() {
+        super.onInitPause()
+        if (beaconManager?.isBound(this) == true) {
+            stopScan()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startScan()
+    }
+
+
+}
