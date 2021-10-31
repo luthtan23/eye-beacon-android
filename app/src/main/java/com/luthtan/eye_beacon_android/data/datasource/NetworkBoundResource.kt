@@ -2,7 +2,7 @@ package com.luthtan.simplebleproject.data.datasource
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.luthtan.simplebleproject.data.network.ApiResponse
+import com.luthtan.eye_beacon_android.data.network.ApiResponse
 import com.luthtan.simplebleproject.data.network.StatusResponse
 import com.luthtan.simplebleproject.data.utils.vo.Resource
 import com.luthtan.eye_beacon_android.data.utils.AppExecutors

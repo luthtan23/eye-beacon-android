@@ -9,8 +9,11 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.luthtan.eye_beacon_android.data.local.preferences.PreferenceConstants
 import com.luthtan.simplebleproject.data.local.preferences.PreferenceHelper
 import com.luthtan.simplebleproject.data.repository.PreferencesRepository
-import com.luthtan.simplebleproject.data.network.ApiConstant
+import com.luthtan.eye_beacon_android.data.network.ApiConstant
 import com.luthtan.eye_beacon_android.data.network.ApiService
+import com.luthtan.eye_beacon_android.data.network.DynamicRetrofit
+import com.luthtan.eye_beacon_android.data.network.HostSelectionInterceptor
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -54,6 +57,9 @@ val coreModule = module {
         }
         val okHttpClient = httpClient.build()
 
+        val builder = OkHttpClient().newBuilder()
+        builder.interceptors().forEach { builder.addInterceptor(it) }
+
         Retrofit.Builder()
             .baseUrl(ApiConstant.BASE_URL)
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
@@ -66,6 +72,5 @@ val coreModule = module {
         (get<Retrofit>()).create(ApiService::class.java)
     }
 
-    single { PreferencesRepository(get()) }
 
 }

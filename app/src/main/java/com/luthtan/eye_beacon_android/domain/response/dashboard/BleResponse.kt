@@ -1,4 +1,4 @@
-package com.luthtan.simplebleproject.domain.response.dashboard
+package com.luthtan.eye_beacon_android.domain.response.dashboard
 
 import com.google.gson.annotations.SerializedName
 

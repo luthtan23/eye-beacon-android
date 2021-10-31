@@ -1,11 +1,8 @@
 package com.luthtan.eye_beacon_android.data.datasource
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.luthtan.simplebleproject.data.local.room.DashboardDao
-import com.luthtan.simplebleproject.domain.entities.dashboard.BleEntity
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleEntity
 
 class LocalDataSource(private val dashboardDao: DashboardDao) {
 

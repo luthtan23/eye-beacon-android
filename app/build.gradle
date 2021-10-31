@@ -4,6 +4,7 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -95,4 +96,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+
+
 }

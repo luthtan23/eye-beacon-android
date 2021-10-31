@@ -34,12 +34,6 @@ class PrivacyAgreementFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dashboardRepository.getUserData().observe(viewLifecycleOwner, { apiResponse ->
-            val response = apiResponse.body
-            if (response != null) {
-                binding.tvPrivacyAgreementText.text = response.nameUser
-            }
-        })
 
         binding.btnPrivacyAgreementAccept.setOnClickListener{ backToRegisterWithAcceptable() }
     }

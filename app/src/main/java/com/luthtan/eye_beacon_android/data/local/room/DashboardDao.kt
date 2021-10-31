@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.luthtan.simplebleproject.domain.entities.dashboard.BleEntity
+import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleEntity
 
 @Dao
 interface DashboardDao {

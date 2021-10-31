@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import org.koin.core.KoinComponent
 
-abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment() {
+abstract class BaseFragment<VB : ViewBinding, VM : ViewModel> : Fragment(), KoinComponent {
     abstract val binding: VB
     abstract val viewModel: VM
 

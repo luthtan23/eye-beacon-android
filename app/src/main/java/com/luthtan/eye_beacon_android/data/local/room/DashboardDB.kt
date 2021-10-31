@@ -3,7 +3,7 @@ package com.luthtan.eye_beacon_android.data.local.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.luthtan.simplebleproject.data.local.room.DashboardDao
-import com.luthtan.simplebleproject.domain.entities.dashboard.BleEntity
+import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleEntity
 
 @Database(
     entities = [BleEntity::class],

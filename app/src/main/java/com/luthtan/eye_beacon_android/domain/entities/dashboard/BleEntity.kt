@@ -1,9 +1,11 @@
-package com.luthtan.simplebleproject.domain.entities.dashboard
+package com.luthtan.eye_beacon_android.domain.entities.dashboard
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "user_ble_table")
 data class BleEntity(

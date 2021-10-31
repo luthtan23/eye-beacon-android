@@ -26,5 +26,9 @@
         android:id="@+id/dashboardFragment"
         android:name="com.luthtan.eye_beacon_android.features.dashboard.DashboardFragment"
         android:label="DashboardFragment"
-        tools:layout="@layout/fragment_dashboard"/>
+        tools:layout="@layout/fragment_dashboard">
+        <argument
+            android:name="loginParams"
+            app:argType="com.luthtan.eye_beacon_android.domain.entities.login.LoginPage" />
+    </fragment>
 </navigation>
