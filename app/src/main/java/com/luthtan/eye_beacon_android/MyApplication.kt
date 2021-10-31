@@ -1,12 +1,13 @@
 package com.luthtan.eye_beacon_android
 
-import com.google.android.play.core.splitcompat.SplitCompatApplication
+import android.app.Application
 import com.luthtan.eye_beacon_android.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 
-class MyApplication : SplitCompatApplication() {
+class MyApplication : Application(), KoinComponent {
 
     override fun onCreate() {
         super.onCreate()

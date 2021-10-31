@@ -5,13 +5,17 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.RemoteException
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.google.firebase.database.DatabaseReference
 import com.luthtan.eye_beacon_android.base.BaseFragment
+import com.luthtan.eye_beacon_android.data.network.DynamicRetrofit
 import com.luthtan.eye_beacon_android.databinding.FragmentDashboardBinding
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
 import com.luthtan.eye_beacon_android.features.dashboard.adapter.DashboardAdapter
 import com.luthtan.eye_beacon_android.features.login.AlertLocationDialog
+import com.luthtan.eye_beacon_android.service.EddyStoneService
 import com.luthtan.simplebleproject.data.repository.PreferencesRepository
 import io.reactivex.disposables.Disposable
 import org.altbeacon.beacon.*
@@ -36,6 +40,11 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         DashboardAdapter()
     }
 
+    val args: DashboardFragmentArgs by navArgs()
+
+    private var isInside = false
+    private var flagAPI = false
+
     private val bluetoothState: BluetoothManager by inject()
 
     private var isScanning = false
@@ -45,7 +54,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         }
 
     private var beaconManager: BeaconManager? = null
-    private var bluetoothStateDisposable: Disposable? = null
 
     override fun onInitViews() {
         super.onInitViews()
@@ -53,17 +61,21 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         setBluetooth()
 
         binding.rvDashboardHistory.adapter = dashboardAdapter
+        binding.tvDashboardUsername.text = args.loginParams.username
+        binding.etDashboardUuid.setText(args.loginParams.eyeBle)
 
     }
 
     override fun onInitObservers() {
         super.onInitObservers()
 
-        /*viewModel.getAllData.observe(this, { list ->
-            if (list != null) {
+        viewModel.testParams()
 
+        viewModel.getUserData.observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                showToast(it)
             }
-        })*/
+        })
 
     }
 
@@ -107,13 +119,28 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     }
 
     private fun storeBeaconsAround(beacons: Collection<Beacon>) {
-        dashboardAdapter.setBleLogHistory(beacons.toMutableList())
-        beacons.forEachIndexed { index, beacon ->
-            if (beacon.serviceUuid == 0xfeaa && beacon.beaconTypeCode == 0x10) {
-                val url = UrlBeaconUrlCompressor.uncompress(beacon.id1.toByteArray())
-                showToast(url)
+        if (beacons.isNotEmpty()) {
+            beacons.forEach { beacon ->
+                showToast(beacon.toString())
+                isInside = beacon.bluetoothAddress == args.loginParams.eyeBle
+                if (isInside) {
+                    if (!flagAPI) {
+                        requireActivity().startService(getServiceIntent(requireContext()))
+                        binding.imgDashboardNotFound.visibility = View.GONE
+                        binding.tvDashboardNotFoundDescription.visibility = View.GONE
+                        viewModel.setParams(args.loginParams)
+                        showToast("INI KEDETEK SAMA")
+                    }
+                    flagAPI = true
+                } else {
+                    flagAPI = false
+                }
             }
         }
+    }
+
+    private fun getServiceIntent(context: Context) : Intent {
+        return Intent(context, EddyStoneService::class.java)
     }
 
     override fun onRequestResult(granted: Boolean) {
@@ -165,13 +192,14 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
     override fun onInitPause() {
         super.onInitPause()
-        if (beaconManager?.isBound(this) == true) {
-            stopScan()
-        }
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        if (beaconManager?.isBound(this) == true) {
+            stopScan()
+        }
     }
 
     override fun onResume() {

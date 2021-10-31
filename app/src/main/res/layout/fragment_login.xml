@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -34,17 +35,18 @@
                 android:layout_marginBottom="20dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textlayout_login_username_description"
+                android:id="@+id/textlayout_login_uuid_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:startIconDrawable="@drawable/ic_baseline_person_outline">
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/ic_baseline_bluetooth_searching">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_login_username"
+                    android:id="@+id/etLoginUUID"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/login_username_description"
+                    android:hint="@string/uuid"
                     android:inputType="text"
                     android:padding="16dp"
                     android:textSize="16sp" />
@@ -52,26 +54,38 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textlayout_login_password_description"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/textlayout_login_local_ip_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="20dp"
-                android:hint="@string/login_password_description"
-                app:passwordToggleDrawable="@drawable/show_password_selector"
-                app:passwordToggleEnabled="true"
-                app:startIconDrawable="@drawable/ic_outline_lock">
+                android:layout_marginHorizontal="16dp"
+                android:hint="@string/local_ip"
+                app:startIconDrawable="@drawable/ic_baseline_link_24">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_login_password"
+                    android:id="@+id/etLoginLocalIP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:maxLength="15"
+                    android:inputType="text"
                     android:padding="16dp"
                     android:textSize="16sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textlayout_login_username_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:startIconDrawable="@drawable/ic_baseline_person_outline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLoginUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/username"
+                    android:inputType="text"
+                    android:padding="16dp"
+                    android:textSize="16sp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,7 +96,7 @@
                 android:layout_margin="16dp"
                 android:padding="16dp"
                 android:text="@string/login_login_description"
-                android:onClick="@{() -> viewModel.onLoginClick()}"/>
+                android:onClick="@{() -> viewModel.onClickGoToDashboard(etLoginUUID.getText().toString(),etLoginLocalIP.getText().toString(),etLoginUsername.getText().toString())}"/>
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_test_image"

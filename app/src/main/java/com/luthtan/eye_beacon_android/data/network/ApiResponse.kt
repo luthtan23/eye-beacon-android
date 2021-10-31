@@ -1,4 +1,6 @@
-package com.luthtan.simplebleproject.data.network
+package com.luthtan.eye_beacon_android.data.network
+
+import com.luthtan.simplebleproject.data.network.StatusResponse
 
 class ApiResponse<T>(val status: StatusResponse, val body: T?, val message: String?) {
     companion object {

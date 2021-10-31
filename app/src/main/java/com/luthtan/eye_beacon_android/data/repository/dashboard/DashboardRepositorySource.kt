@@ -1,16 +1,19 @@
 package com.luthtan.eye_beacon_android.data.repository.dashboard
 
 import androidx.lifecycle.LiveData
-import com.luthtan.simplebleproject.data.network.ApiResponse
-import com.luthtan.simplebleproject.domain.entities.dashboard.BleEntity
-import com.luthtan.simplebleproject.domain.response.dashboard.BleResponse
+import com.luthtan.eye_beacon_android.data.network.ApiResponse
+import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleEntity
+import com.luthtan.eye_beacon_android.domain.entities.login.LoginPage
+import com.luthtan.eye_beacon_android.domain.response.dashboard.BleResponse
 
 interface DashboardRepositorySource {
 
-    fun getUserData(): LiveData<ApiResponse<BleResponse>>
+    fun getUserData(params: LoginPage): LiveData<ApiResponse<String>>
 
     suspend fun insertUserData(bleEntity: BleEntity)
 
     fun getAllUserData(): LiveData<List<BleEntity>>
+
+    fun testParams(): LiveData<String>
 
 }

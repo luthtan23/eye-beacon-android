@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.luthtan.eye_beacon_android.databinding.ItemDashboardDetailBinding
-import com.luthtan.simplebleproject.domain.entities.dashboard.BleEntity
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
 
@@ -21,10 +20,12 @@ class DashboardAdapter : RecyclerView.Adapter<DashboardAdapter.DashboardViewHold
     inner class DashboardViewHolder(private val binding: ItemDashboardDetailBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(bleEntity: Beacon) {
             binding.apply {
-                val url = UrlBeaconUrlCompressor.uncompress(bleEntity.id1.toByteArray())
+                if (bleEntity.serviceUuid == 0xfeaa && bleEntity.beaconTypeCode == 0x10) {
+                    val url = UrlBeaconUrlCompressor.uncompress(bleEntity.id1.toByteArray())
+                    tvItemDashboardTime.text = bleEntity.rssi.toString().plus(" Url: $url")
+                }
                 tvItemDashboardDate.text = bleEntity.bluetoothName
                 tvItemDashboardRoomDescription.text = bleEntity.bluetoothAddress
-                tvItemDashboardTime.text = bleEntity.rssi.toString().plus(" Url: $url")
             }
         }
 
