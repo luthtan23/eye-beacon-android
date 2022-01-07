@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.luthtan.eye_beacon_android.domain.entities.login.ErrorLoginForm
 import com.luthtan.eye_beacon_android.base.util.SingleEvents
 import com.luthtan.eye_beacon_android.domain.entities.login.LoginPage
-import org.koin.core.KoinComponent
 
-class LoginViewModel() : ViewModel(), LoginListener, KoinComponent {
+class LoginViewModel() : ViewModel(), LoginListener {
 
     private val _goToDashboard = MutableLiveData<SingleEvents<LoginPage>>()
     val goToDashboard: LiveData<SingleEvents<LoginPage>> = _goToDashboard

@@ -7,13 +7,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
-import org.koin.core.KoinComponent
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BluetoothManager(private val adapter: BluetoothAdapter?, context: Context) : KoinComponent{
+@Singleton
+class BluetoothManager @Inject constructor(private val adapter: BluetoothAdapter?, context: Context){
 
     private val subject: BehaviorProcessor<DashboardFragment.BluetoothState> =
             BehaviorProcessor.createDefault(getStaeFromAdapterState(adapter?.state ?: BluetoothAdapter.STATE_OFF))

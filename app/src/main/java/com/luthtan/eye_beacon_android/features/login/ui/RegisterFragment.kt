@@ -15,11 +15,10 @@ import com.luthtan.eye_beacon_android.features.login.util.REGISTER_TO_LOGIN_LINK
 import com.luthtan.eye_beacon_android.features.login.util.REGISTER_TO_PRIVACY_AGREEMENT_LINK
 import com.luthtan.simplebleproject.common.makeLinks
 import com.luthtan.simplebleproject.data.repository.PreferencesRepository
-import org.koin.android.ext.android.inject
 
 class RegisterFragment : Fragment(), View.OnClickListener {
 
-    private val preference: PreferencesRepository by inject()
+//    private val preference: PreferencesRepository by inject()
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
