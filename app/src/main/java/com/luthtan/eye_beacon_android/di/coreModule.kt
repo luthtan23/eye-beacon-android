@@ -7,13 +7,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.luthtan.eye_beacon_android.data.local.preferences.PreferenceConstants
-import com.luthtan.simplebleproject.data.local.preferences.PreferenceHelper
-import com.luthtan.simplebleproject.data.repository.PreferencesRepository
+import com.luthtan.eye_beacon_android.data.local.preferences.PreferenceHelper
 import com.luthtan.eye_beacon_android.data.network.ApiConstant
 import com.luthtan.eye_beacon_android.data.network.ApiService
-import com.luthtan.eye_beacon_android.data.network.DynamicRetrofit
-import com.luthtan.eye_beacon_android.data.network.HostSelectionInterceptor
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication

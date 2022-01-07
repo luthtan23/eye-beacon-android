@@ -4,6 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.luthtan.eye_beacon_android.R
 import com.luthtan.eye_beacon_android.base.BaseFragment
+import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
 import com.luthtan.eye_beacon_android.databinding.FragmentLoginBinding
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
 

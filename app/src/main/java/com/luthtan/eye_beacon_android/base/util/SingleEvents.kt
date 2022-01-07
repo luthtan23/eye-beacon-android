@@ -1,4 +1,4 @@
-package com.luthtan.eye_beacon_android.utils//https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150
+package com.luthtan.eye_beacon_android.base.util//https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150
 
 open class SingleEvents<out T>(private val content: T) {
 

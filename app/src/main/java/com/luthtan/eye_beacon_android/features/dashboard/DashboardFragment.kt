@@ -10,16 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.database.DatabaseReference
 import com.luthtan.eye_beacon_android.base.BaseFragment
-import com.luthtan.eye_beacon_android.data.network.DynamicRetrofit
 import com.luthtan.eye_beacon_android.databinding.FragmentDashboardBinding
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
 import com.luthtan.eye_beacon_android.features.dashboard.adapter.DashboardAdapter
-import com.luthtan.eye_beacon_android.features.login.AlertLocationDialog
-import com.luthtan.eye_beacon_android.service.EddyStoneService
+import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
+import com.luthtan.eye_beacon_android.features.dashboard.service.EddyStoneService
 import com.luthtan.simplebleproject.data.repository.PreferencesRepository
-import io.reactivex.disposables.Disposable
 import org.altbeacon.beacon.*
-import org.altbeacon.beacon.utils.UrlBeaconUrlCompressor
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 
@@ -69,7 +66,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     override fun onInitObservers() {
         super.onInitObservers()
 
-        viewModel.testParams()
+        viewModel.setParams(args.loginParams)
 
         viewModel.getUserData.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
@@ -129,7 +126,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                         binding.imgDashboardNotFound.visibility = View.GONE
                         binding.tvDashboardNotFoundDescription.visibility = View.GONE
                         viewModel.setParams(args.loginParams)
-                        showToast("INI KEDETEK SAMA")
+//                        showToast("INI KEDETEK SAMA")
                     }
                     flagAPI = true
                 } else {

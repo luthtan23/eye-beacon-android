@@ -1,4 +1,4 @@
-package com.luthtan.simplebleproject.data.local.preferences
+package com.luthtan.eye_beacon_android.data.local.preferences
 
 import android.content.SharedPreferences
 import com.luthtan.simplebleproject.data.utils.Constant

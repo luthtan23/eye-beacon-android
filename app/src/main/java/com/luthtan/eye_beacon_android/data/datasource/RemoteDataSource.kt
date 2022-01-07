@@ -10,7 +10,7 @@ import java.lang.Exception
 
 class RemoteDataSource(private val apiService: ApiService) {
 
-    fun getUserData(params: LoginPage): MutableLiveData<ApiResponse<String>> {
+    fun getUserData(params: String): MutableLiveData<ApiResponse<String>> {
         val bleResponse = MutableLiveData<ApiResponse<String>>()
         GlobalScope.launch {
             try {

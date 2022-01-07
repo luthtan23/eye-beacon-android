@@ -19,24 +19,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Eyebeaconandroid">
         <activity
-            android:name=".activity.SplashScreenActivity"
+            android:name=".MainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/SplashScreenStyle">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.MainActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
 
         </activity>
 
         <service
-            android:name=".service.EddyStoneService"
+            android:name="com.luthtan.eye_beacon_android.features.dashboard.service.EddyStoneService"
             android:enabled="true"
             android:exported="false" >
         </service>

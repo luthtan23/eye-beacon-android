@@ -19,17 +19,10 @@ class DashboardRepository (
     private val appExecutors: AppExecutors
 ) : DashboardRepositorySource {
 
-    override fun getUserData(params: LoginPage): LiveData<ApiResponse<String>> = remoteDataSource.getUserData(params)
+    override fun getUserData(params: String): LiveData<ApiResponse<String>> = remoteDataSource.getUserData(params)
 
     override suspend fun insertUserData(bleEntity: BleEntity) = localDataSource.insertUserData(bleEntity)
 
     override fun getAllUserData(): LiveData<List<BleEntity>> = localDataSource.getAllUserData()
 
-    override fun testParams(): LiveData<String> {
-        val bleResponse = MutableLiveData<ApiResponse<String>>()
-        bleResponse.postValue(ApiResponse.success("TEST REPOSITORY"))
-        val test = MutableLiveData<String>()
-        test.value = "TEST REPOSITORY"
-        return test
-    }
 }

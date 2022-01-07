@@ -29,12 +29,8 @@ class DashboardViewModel : ViewModel(),
         _getUserData.value = ""
     }
 
-    fun testParams() {
-        _getUserData.value = dashboardRepository.testParams().value
-    }
-
     fun setParams(params: LoginPage) {
-        _getUserData.value = dashboardRepository.getUserData(params).value?.body!!
+        _getUserData.value = dashboardRepository.getUserData(params.localIP).value?.body!!
     }
 
     fun insertRealtime(bleEntity: BleEntity) {
@@ -43,12 +39,9 @@ class DashboardViewModel : ViewModel(),
         }
     }
 
-    private fun getAllUserData(): LiveData<List<BleEntity>> = dashboardRepository.getAllUserData()
-
-
-
+//    private fun getAllUserData(): LiveData<List<BleEntity>> = dashboardRepository.getAllUserData()
 
     init {
-        _getAllData.value = getAllUserData().value
+//        _getAllData.value = getAllUserData().value
     }
 }

@@ -8,12 +8,10 @@ import com.luthtan.eye_beacon_android.domain.response.dashboard.BleResponse
 
 interface DashboardRepositorySource {
 
-    fun getUserData(params: LoginPage): LiveData<ApiResponse<String>>
+    fun getUserData(params: String): LiveData<ApiResponse<String>>
 
     suspend fun insertUserData(bleEntity: BleEntity)
 
     fun getAllUserData(): LiveData<List<BleEntity>>
-
-    fun testParams(): LiveData<String>
 
 }

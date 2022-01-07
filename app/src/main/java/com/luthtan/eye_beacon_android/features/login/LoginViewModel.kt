@@ -1,16 +1,11 @@
 package com.luthtan.eye_beacon_android.features.login
 
-import android.app.Application
-import android.content.Context
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.luthtan.eye_beacon_android.MyApplication
-import com.luthtan.eye_beacon_android.R
 import com.luthtan.eye_beacon_android.domain.entities.login.ErrorLoginForm
-import com.luthtan.eye_beacon_android.utils.SingleEvents
+import com.luthtan.eye_beacon_android.base.util.SingleEvents
 import com.luthtan.eye_beacon_android.domain.entities.login.LoginPage
 import org.koin.core.KoinComponent
 
@@ -41,8 +36,10 @@ class LoginViewModel() : ViewModel(), LoginListener, KoinComponent {
 
     fun onClickGoToDashboard(macAddress: String, localIP: String, username: String) {
         loginModel.value?.let { loginPage ->
+            val sampleHost = "o"
             loginPage.eyeBle = macAddress
-            loginPage.localIP = localIP
+//            loginPage.localIP = localIP
+            loginPage.localIP = sampleHost
             loginPage.username = username
             _loginModel.value = loginPage
         }

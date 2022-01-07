@@ -1,4 +1,4 @@
-package com.luthtan.eye_beacon_android.service
+package com.luthtan.eye_beacon_android.features.dashboard.service
 
 import android.app.*
 import android.content.Intent
@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.navigation.NavDeepLinkBuilder
 import com.luthtan.eye_beacon_android.R
-import com.luthtan.eye_beacon_android.activity.MainActivity
+import com.luthtan.eye_beacon_android.MainActivity
 import com.luthtan.eye_beacon_android.features.dashboard.DashboardFragment
 
 class EddyStoneService: Service() {

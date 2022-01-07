@@ -1,4 +1,4 @@
-package com.luthtan.eye_beacon_android.features.login
+package com.luthtan.eye_beacon_android.base.util
 
 import android.app.Dialog
 import android.content.Context
