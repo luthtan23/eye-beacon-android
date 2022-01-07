@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.luthtan.eye_beacon_android.data.local.room.DashboardDB
-import com.luthtan.eye_beacon_android.di.DATABASE_NAME
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -28,46 +27,46 @@ fun getDateFromMillis(millis: Long): String {
 
 }
 
-fun backupDatabaseUser(dashboardDB: DashboardDB, context: Context) {
-    dashboardDB.close()
-
-    val dbFile = context.getDatabasePath(DATABASE_NAME)
-    val sDir = File(dbFile.absolutePath, "backup")
-    val fileName = DATABASE_NAME.plus(getDateFromMillis(System.currentTimeMillis()))
-
-    val sfPath = sDir.path.plus(File.separator).plus(fileName)
-
-    if (!sDir.exists()) {
-        sDir.mkdir()
-    } else {
-        checkAndDeleteBackupFile(sDir, sfPath)
-    }
-
-    val saveFile = File(sfPath)
-    if (saveFile.exists()) {
-        Log.d(LOGGER, "File exists. Deleting it and then creating new file.");
-        saveFile.delete()
-    }
-    try {
-        if (saveFile.createNewFile()) {
-            val bufferSize = 8 * 1024
-            val buffer = ByteArray(bufferSize)
-            var byteRead: Int
-            val saveDb = FileOutputStream(sfPath)
-            val inDb = FileInputStream(dbFile)
-            while ((inDb.read(buffer, 0, bufferSize)) > 0) {
-                byteRead = inDb.read(buffer, 0, bufferSize)
-                saveDb.write(buffer, 0, byteRead)
-            }
-            saveDb.flush()
-            inDb.close()
-            saveDb.close()
-        }
-    } catch (e: IOException) {
-        e.printStackTrace()
-        Log.d(LOGGER, "ex: $e")
-    }
-}
+//fun backupDatabaseUser(dashboardDB: DashboardDB, context: Context) {
+//    dashboardDB.close()
+//
+//    val dbFile = context.getDatabasePath(DATABASE_NAME)
+//    val sDir = File(dbFile.absolutePath, "backup")
+//    val fileName = DATABASE_NAME.plus(getDateFromMillis(System.currentTimeMillis()))
+//
+//    val sfPath = sDir.path.plus(File.separator).plus(fileName)
+//
+//    if (!sDir.exists()) {
+//        sDir.mkdir()
+//    } else {
+//        checkAndDeleteBackupFile(sDir, sfPath)
+//    }
+//
+//    val saveFile = File(sfPath)
+//    if (saveFile.exists()) {
+//        Log.d(LOGGER, "File exists. Deleting it and then creating new file.");
+//        saveFile.delete()
+//    }
+//    try {
+//        if (saveFile.createNewFile()) {
+//            val bufferSize = 8 * 1024
+//            val buffer = ByteArray(bufferSize)
+//            var byteRead: Int
+//            val saveDb = FileOutputStream(sfPath)
+//            val inDb = FileInputStream(dbFile)
+//            while ((inDb.read(buffer, 0, bufferSize)) > 0) {
+//                byteRead = inDb.read(buffer, 0, bufferSize)
+//                saveDb.write(buffer, 0, byteRead)
+//            }
+//            saveDb.flush()
+//            inDb.close()
+//            saveDb.close()
+//        }
+//    } catch (e: IOException) {
+//        e.printStackTrace()
+//        Log.d(LOGGER, "ex: $e")
+//    }
+//}
 
 fun checkAndDeleteBackupFile(directory: File, path: String) {
     val currentDateFile = File(path)
