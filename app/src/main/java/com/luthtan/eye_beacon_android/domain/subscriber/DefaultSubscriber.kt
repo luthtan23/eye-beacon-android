@@ -1,4 +1,4 @@
-package com.webssup.home01.domain.subscriber
+package com.luthtan.eye_beacon_android.domain.subscriber
 
 import io.reactivex.subscribers.DisposableSubscriber
 
@@ -15,7 +15,13 @@ abstract class DefaultSubscriber<T> : DisposableSubscriber<T>() {
         onError(ResultState.Error(throwable))
     }
 
+    override fun onStart() {
+        onLoading(ResultState.Loading())
+    }
+
     abstract fun onError(error: ResultState<T>)
 
     abstract fun onSuccess(data: ResultState<T>)
+
+    abstract fun onLoading(loading: ResultState<T>)
 }

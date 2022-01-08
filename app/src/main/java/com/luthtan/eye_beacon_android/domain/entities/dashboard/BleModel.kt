@@ -1,4 +1,5 @@
 package com.luthtan.eye_beacon_android.domain.entities.dashboard
 
-class BleModel {
-}
+data class BleModel (
+    val nameUser: String
+)

@@ -14,6 +14,7 @@ import com.luthtan.eye_beacon_android.databinding.FragmentDashboardBinding
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
 import com.luthtan.eye_beacon_android.features.dashboard.adapter.DashboardAdapter
 import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
+import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import com.luthtan.eye_beacon_android.features.dashboard.service.EddyStoneService
 import com.luthtan.simplebleproject.data.repository.PreferencesRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,10 +27,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewModel>(), BeaconConsumer,
     RangeNotifier {
-
-//    private val database: DatabaseReference by inject()
-//
-//    private val preferences: PreferencesRepository by inject()
 
     override val viewModel: DashboardViewModel by viewModels()
 
@@ -67,11 +64,19 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     override fun onInitObservers() {
         super.onInitObservers()
 
-//        viewModel.setParams(args.loginParams)
+        viewModel.signInRoom()
 
-        viewModel.getUserData.observe(viewLifecycleOwner, {
-            if (it.isNotEmpty()) {
-                showToast(it)
+        viewModel.signInRoomResponse.observe(this, {
+            when(it) {
+                is ResultState.Loading -> {
+                    showToast("Loading")
+                }
+                is ResultState.Success -> {
+                    showToast(it.data.success.toString())
+                }
+                is ResultState.Error -> {
+                    Timber.e(it.throwable)
+                }
             }
         })
 

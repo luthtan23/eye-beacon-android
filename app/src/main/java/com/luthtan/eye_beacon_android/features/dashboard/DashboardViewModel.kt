@@ -1,43 +1,48 @@
 package com.luthtan.eye_beacon_android.features.dashboard
 
+import android.accounts.NetworkErrorException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.luthtan.eye_beacon_android.data.repository.dashboard.DashboardRepository
-import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleEntity
-import com.luthtan.eye_beacon_android.domain.entities.login.LoginPage
+import com.luthtan.eye_beacon_android.base.util.BaseViewModel
+import com.luthtan.eye_beacon_android.domain.interactor.SignInRoom
 import com.luthtan.eye_beacon_android.domain.response.dashboard.BleResponse
-import kotlinx.coroutines.Dispatchers
+import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
-class DashboardViewModel : ViewModel() {
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
+    private val signInRoom: SignInRoom
+) : BaseViewModel() {
 
-//    private val dashboardRepository: DashboardRepository by inject()
+    private val _signInRoomResponse = MutableLiveData<ResultState<BleResponse>>()
+    val signInRoomResponse: LiveData<ResultState<BleResponse>> = _signInRoomResponse
 
-    private val _getAllData = MutableLiveData<List<BleEntity>>()
-    val getAllData: LiveData<List<BleEntity>> = _getAllData
-
-    private val _getUserData = MutableLiveData<String>()
-    val getUserData: LiveData<String> = _getUserData
-
-    init {
-        _getUserData.value = ""
-    }
-
-//    fun setParams(params: LoginPage) {
-//        _getUserData.value = dashboardRepository.getUserData(params.localIP).value?.body!!
-//    }
-//
-//    fun insertRealtime(bleEntity: BleEntity) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            dashboardRepository.insertUserData(bleEntity)
-//        }
-//    }
-
-//    private fun getAllUserData(): LiveData<List<BleEntity>> = dashboardRepository.getAllUserData()
-
-    init {
-//        _getAllData.value = getAllUserData().value
+    fun signInRoom() {
+        viewModelScope.launch {
+            try {
+                val param = SignInRoom.Param()
+//                signInRoom.execute(param).collect {
+//                    when(it) {
+//                        is ResultState.Loading -> {
+//                            _signInRoomResponse.value = ResultState.Loading()
+//                        }
+//                        is ResultState.Success -> {
+//                            _signInRoomResponse.value = ResultState.Success(it.data?.body()!!)
+//                        }
+//                        is ResultState.Error -> {
+//                            _signInRoomResponse.value = ResultState.Error(it.throwable)
+//                        }
+//                    }
+//                }
+            } catch (e: NetworkErrorException) {
+                Timber.e(e)
+                _signInRoomResponse.value = ResultState.Error(e)
+            }
+        }
     }
 }
