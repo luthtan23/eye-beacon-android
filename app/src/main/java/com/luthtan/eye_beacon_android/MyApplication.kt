@@ -5,9 +5,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MyApplication : BaseApplication() {
-    override fun getBaseUrl(): String = ""
+    override fun getBaseUrl(): String = "https://reqbin.com/"
 
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

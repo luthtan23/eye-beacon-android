@@ -6,8 +6,14 @@ import com.luthtan.eye_beacon_android.R
 import com.luthtan.eye_beacon_android.base.BaseFragment
 import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
 import com.luthtan.eye_beacon_android.databinding.FragmentLoginBinding
+import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.FragmentScoped
+import timber.log.Timber
 
+@FragmentScoped
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     override val viewModel: LoginViewModel by viewModels()
@@ -25,6 +31,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
         binding.viewModel = viewModel
         binding.listener = viewModel
+
+        viewModel.signInRoom()
 
         requestPermission
     }
@@ -58,6 +66,20 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
                 }
                 if (valid) {
                     findNavController().navigate(LoginFragmentDirections.actionGoToDashboard(loginPage))
+                }
+            }
+        })
+
+        viewModel.signInRoomResponse.observe(this, {
+            when(it) {
+                is ResultState.Loading -> {
+                    showToast("Loading")
+                }
+                is ResultState.Success -> {
+                    showToast(it.data.nameUser)
+                }
+                is ResultState.Error -> {
+                    Timber.e(it.throwable)
                 }
             }
         })
