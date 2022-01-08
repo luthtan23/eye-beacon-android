@@ -77,10 +77,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
     }
 
-//    private fun setBluetooth() {
-//        beaconManager = BeaconManager.getInstanceForApplication(applicationContext)
-//    }
-
     private fun unbindBeaconManager() {
         if (beaconManager.isBound(this) == true) {
             beaconManager.backgroundMode = true
