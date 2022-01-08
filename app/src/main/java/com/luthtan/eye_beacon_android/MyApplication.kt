@@ -5,6 +5,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MyApplication : BaseApplication() {
-    override fun getBaseUrl(): String = "https://reqbin.com/"
+    override fun getBaseUrl(): String = "http://localhost:3000"
 
 }

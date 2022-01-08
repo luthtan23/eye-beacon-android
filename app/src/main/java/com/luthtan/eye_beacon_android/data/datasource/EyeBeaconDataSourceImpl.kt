@@ -15,7 +15,7 @@ class EyeBeaconDataSourceImpl @Inject constructor(
 ) : EyeBeaconDataSource {
 
     override fun signInRoom(uuid: String, status: String): Flowable<BleModel> {
-        return eyeBeaconApi.signInRoom().map(signInRoomMapper)
+        return eyeBeaconApi.signInRoom("https://reqbin.com/sample/post/json").map(signInRoomMapper)
     }
 
 }
