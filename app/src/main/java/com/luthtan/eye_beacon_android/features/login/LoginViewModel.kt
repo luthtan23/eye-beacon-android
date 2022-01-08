@@ -11,7 +11,6 @@ import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleModel
 import com.luthtan.eye_beacon_android.domain.entities.login.ErrorLoginForm
 import com.luthtan.eye_beacon_android.domain.entities.login.LoginPage
 import com.luthtan.eye_beacon_android.domain.interactor.SignInRoom
-import com.luthtan.eye_beacon_android.domain.response.dashboard.BleResponse
 import com.luthtan.eye_beacon_android.domain.subscriber.DefaultSubscriber
 import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -65,6 +64,7 @@ class LoginViewModel @Inject constructor(
     fun signInRoom() {
         viewModelScope.launch {
             try {
+                _signInRoomResponse.value = ResultState.Loading()
                 val param = SignInRoom.Param()
                 signInRoom.execute(object : DefaultSubscriber<BleModel>() {
                     override fun onError(error: ResultState<BleModel>) {
@@ -74,10 +74,6 @@ class LoginViewModel @Inject constructor(
 
                     override fun onSuccess(data: ResultState<BleModel>) {
                         _signInRoomResponse.value = data
-                    }
-
-                    override fun onLoading(loading: ResultState<BleModel>) {
-                        _signInRoomResponse.value = ResultState.Loading()
                     }
 
                 },param)

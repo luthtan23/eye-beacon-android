@@ -15,13 +15,7 @@ abstract class DefaultSubscriber<T> : DisposableSubscriber<T>() {
         onError(ResultState.Error(throwable))
     }
 
-    override fun onStart() {
-        onLoading(ResultState.Loading())
-    }
-
     abstract fun onError(error: ResultState<T>)
 
     abstract fun onSuccess(data: ResultState<T>)
-
-    abstract fun onLoading(loading: ResultState<T>)
 }

@@ -5,8 +5,6 @@ import com.luthtan.eye_beacon_android.domain.response.dashboard.BleResponse
 
 class SignInRoomMapper : Mapper<BleResponse, BleModel>() {
     override fun apply(from: BleResponse): BleModel {
-        return from.success?.let { response ->
-            BleModel(nameUser = response)
-        }!!
+        return BleModel(nameUser = from.success ?: "COLOK")
     }
 }
