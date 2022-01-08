@@ -12,9 +12,11 @@ class SignInRoom(
 ): FlowableUseCase<BleModel, SignInRoom.Param>(postExecutionThread) {
 
     override fun build(params: Param): Flowable<BleModel> {
-        return eyeBeaconRepository.signInRoom("", "")
+        return eyeBeaconRepository.signInRoom(params.uuid, "")
     }
 
-    class Param()
+    class Param(
+        val uuid: String = ""
+    )
 
 }

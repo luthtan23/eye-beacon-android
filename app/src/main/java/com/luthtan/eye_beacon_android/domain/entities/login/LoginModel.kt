@@ -5,13 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LoginPage(
-    var eyeBle: String,
+    var uuid: String,
     var localIP: String,
     var username: String
 ): Parcelable
-
-data class ErrorLoginForm(
-    var eyeBle: String = "",
-    var localIP: String = "",
-    var username: String = ""
-)
