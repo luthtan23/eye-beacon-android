@@ -58,7 +58,9 @@
     <string name="sample_time">09.00 AM</string>
     <string name="sample_item_room_description">You\'re entered in A344</string>
     <string name="title_feature_sample">Feature Sample</string>
-    <string name="DASHBOARD_stop_advertising">Stop Advertising</string>
+    <string name="dashboard_stop_advertising">Stop Advertising</string>
+    <string name="dashboard_stop_bluetooth_activity">Stop Bluetooth Activity</string>
+    <string name="dashboard_start_bluetooth_activity">Start Bluetooth Activity</string>
 
     <string name="dashboard_log_not_found">Log Not Found</string>
     <string name="dashboard_error_uuid_description">uuid is wrong format, please check again your uuid!</string>

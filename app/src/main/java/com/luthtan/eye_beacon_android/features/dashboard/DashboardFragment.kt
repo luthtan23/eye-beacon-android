@@ -4,19 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.RemoteException
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.google.firebase.database.DatabaseReference
 import com.luthtan.eye_beacon_android.base.BaseFragment
+import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
+import com.luthtan.eye_beacon_android.base.util.KeyboardUtil
 import com.luthtan.eye_beacon_android.databinding.FragmentDashboardBinding
+import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
 import com.luthtan.eye_beacon_android.features.dashboard.adapter.DashboardAdapter
-import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
-import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import com.luthtan.eye_beacon_android.features.dashboard.service.EddyStoneService
-import com.luthtan.simplebleproject.data.repository.PreferencesRepository
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.FragmentScoped
 import org.altbeacon.beacon.*
@@ -42,6 +40,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
     private var isInside = false
     private var flagAPI = false
+    private var initUuid = ""
 
     @Inject lateinit var bluetoothState: BluetoothManager
     @Inject lateinit var beaconManager: BeaconManager
@@ -55,16 +54,27 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     override fun onInitViews() {
         super.onInitViews()
 
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+        binding.listener = viewModel
+
         binding.rvDashboardHistory.adapter = dashboardAdapter
-        binding.tvDashboardUsername.text = args.loginParams.username
-        binding.etDashboardUuid.setText(args.loginParams.eyeBle)
+
+        viewModel.initData(args.loginParams)
+
+        with(bluetoothState) {
+            asFlowable()
+            enableBroadcast()
+        }
+
+        initUuid = args.loginParams.uuid
 
     }
 
     override fun onInitObservers() {
         super.onInitObservers()
 
-        viewModel.signInRoom()
+        viewModel.signInRoom(args.loginParams.localIP)
 
         viewModel.signInRoomResponse.observe(this, {
             when(it) {
@@ -72,11 +82,28 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                     showToast("Loading")
                 }
                 is ResultState.Success -> {
-                    showToast(it.data.success.toString())
+                    showToast(it.data.nameUser)
                 }
                 is ResultState.Error -> {
                     Timber.e(it.throwable)
                 }
+            }
+        })
+
+        viewModel.bluetoothActivityAction.observe(this, {
+            it.getContentIfNotHandled()?.let { state ->
+                KeyboardUtil.hideKeyboard(requireActivity())
+                when(state) {
+                    true -> stopBluetoothActivity()
+                    false -> startBluetoothActivity()
+                }
+            }
+        })
+
+        viewModel.loginPageData.observe(this, {
+            if (it.uuid != initUuid) {
+                showToast("You've been changed UUID")
+                initUuid = it.uuid
             }
         })
 
@@ -121,14 +148,13 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         if (beacons.isNotEmpty()) {
             beacons.forEach { beacon ->
                 showToast(beacon.toString())
-                isInside = beacon.bluetoothAddress == args.loginParams.eyeBle
+                isInside = beacon.bluetoothAddress == initUuid
                 if (isInside) {
                     if (!flagAPI) {
-                        requireActivity().startService(getServiceIntent(requireContext()))
+//                        requireActivity().startService(getServiceIntent(requireContext()))
                         binding.imgDashboardNotFound.visibility = View.GONE
                         binding.tvDashboardNotFoundDescription.visibility = View.GONE
 //                        viewModel.setParams(args.loginParams)
-//                        showToast("INI KEDETEK SAMA")
                     }
                     flagAPI = true
                 } else {
@@ -152,7 +178,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     }
 
     private fun startScan() {
-        if (!bluetoothState.isEnabled() || beaconManager == null) {
+        if (!bluetoothState.isEnabled()) {
             bluetoothState.enable()
         }
 
@@ -170,6 +196,44 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         isScanning = false
     }
 
+    override fun didRangeBeaconsInRegion(collection: MutableCollection<Beacon>?, p1: Region?) {
+        if (isScanning) {
+            if (collection != null) {
+                storeBeaconsAround(collection)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startBluetoothActivity()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopBluetoothActivity()
+    }
+
+    private fun startBluetoothActivity() {
+        try {
+            startScan()
+            bluetoothState.enableBroadcast()
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
+    private fun stopBluetoothActivity() {
+        try {
+            if (beaconManager.isBound(this) == true) {
+                stopScan()
+            }
+            bluetoothState.disableBroadcast()
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
     enum class BluetoothState{
         STATE_OFF,
         STATE_TURNING_OFF,
@@ -180,31 +244,5 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     companion object{
         private val TAG = "DashboardFragment"
     }
-
-    override fun didRangeBeaconsInRegion(collection: MutableCollection<Beacon>?, p1: Region?) {
-        if (isScanning) {
-            if (collection != null) {
-                storeBeaconsAround(collection)
-            }
-        }
-    }
-
-    override fun onInitPause() {
-        super.onInitPause()
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (beaconManager.isBound(this) == true) {
-            stopScan()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        startScan()
-    }
-
 
 }

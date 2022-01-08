@@ -7,38 +7,49 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
+import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BluetoothManager @Inject constructor(private val adapter: BluetoothAdapter?, context: Context){
+class BluetoothManager @Inject constructor(
+    private val adapter: BluetoothAdapter?,
+    private val context: Context
+) {
 
     private val subject: BehaviorProcessor<DashboardFragment.BluetoothState> =
-            BehaviorProcessor.createDefault(getStaeFromAdapterState(adapter?.state ?: BluetoothAdapter.STATE_OFF))
+        BehaviorProcessor.createDefault(
+            getStateFromAdapterState(
+                adapter?.state ?: BluetoothAdapter.STATE_OFF
+            )
+        )
 
-    companion object{
-        val TIME_BLUETOOTH_CHECKED: Long = TimeUnit.MILLISECONDS.convert(2, TimeUnit.SECONDS)
+    companion object {
+        val TIME_BLUETOOTH_CHECKED: Long = TimeUnit.MILLISECONDS.convert(3, TimeUnit.SECONDS)
     }
 
-    init {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(ctx: Context, intent: Intent) {
-                if (BluetoothAdapter.ACTION_STATE_CHANGED == intent.action) {
-                    val state = getStaeFromAdapterState(intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR))
-                    if (state == DashboardFragment.BluetoothState.STATE_TURNING_OFF) {
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            adapter?.enable()
-                        }, TIME_BLUETOOTH_CHECKED)
-                    }
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(ctx: Context, intent: Intent) {
+            if (BluetoothAdapter.ACTION_STATE_CHANGED == intent.action) {
+                val state = getStateFromAdapterState(
+                    intent.getIntExtra(
+                        BluetoothAdapter.EXTRA_STATE,
+                        BluetoothAdapter.ERROR
+                    )
+                )
+                if (state == DashboardFragment.BluetoothState.STATE_TURNING_OFF) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        adapter?.enable()
+                    }, TIME_BLUETOOTH_CHECKED)
                 }
             }
         }
-        context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
     }
 
-    fun getStaeFromAdapterState(state: Int) : DashboardFragment.BluetoothState {
+    fun getStateFromAdapterState(state: Int): DashboardFragment.BluetoothState {
         return when (state) {
             BluetoothAdapter.STATE_OFF -> DashboardFragment.BluetoothState.STATE_OFF
             BluetoothAdapter.STATE_TURNING_OFF -> DashboardFragment.BluetoothState.STATE_TURNING_OFF
@@ -52,9 +63,9 @@ class BluetoothManager @Inject constructor(private val adapter: BluetoothAdapter
 
     fun enable() = adapter?.enable()
 
-    /*fun asFlowable(): Flowable<DashboardFragment.BluetoothState> {
+    fun asFlowable(): Flowable<DashboardFragment.BluetoothState> {
         return subject
-    }*/
+    }
 
     fun isEnabled() = adapter?.isEnabled == true
 
@@ -63,6 +74,22 @@ class BluetoothManager @Inject constructor(private val adapter: BluetoothAdapter
             disable()
         } else {
             enable()
+        }
+    }
+
+    fun enableBroadcast() {
+        try {
+            context.registerReceiver(receiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+
+    fun disableBroadcast() {
+        try {
+            context.unregisterReceiver(receiver)
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 }
