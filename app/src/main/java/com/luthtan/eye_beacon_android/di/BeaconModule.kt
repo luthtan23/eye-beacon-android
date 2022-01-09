@@ -2,7 +2,7 @@ package com.luthtan.eye_beacon_android.di
 
 import android.bluetooth.BluetoothAdapter
 import com.luthtan.eye_beacon_android.MyApplication
-import com.luthtan.eye_beacon_android.features.dashboard.BluetoothManager
+import com.luthtan.eye_beacon_android.features.dashboard.beacon.BluetoothManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

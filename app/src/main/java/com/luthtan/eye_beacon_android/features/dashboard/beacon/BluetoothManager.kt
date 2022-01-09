@@ -1,4 +1,4 @@
-package com.luthtan.eye_beacon_android.features.dashboard
+package com.luthtan.eye_beacon_android.features.dashboard.beacon
 
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
+import com.luthtan.eye_beacon_android.features.dashboard.DashboardFragment
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import timber.log.Timber
