@@ -8,6 +8,7 @@ import com.luthtan.eye_beacon_android.MyApplication
 import com.luthtan.eye_beacon_android.R
 import com.luthtan.eye_beacon_android.base.util.BaseViewModel
 import com.luthtan.eye_beacon_android.base.util.SingleEvents
+import com.luthtan.eye_beacon_android.domain.dtos.BleBody
 import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleEntity
 import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleModel
 import com.luthtan.eye_beacon_android.domain.entities.login.LoginPage
@@ -54,11 +55,11 @@ class DashboardViewModel @Inject constructor(
         _loginPageData.value = loginPage
     }
 
-    fun signInRoom(baseUrl: String) {
+    fun signInRoom(baseUrl: String, bleBody: BleBody) {
         viewModelScope.launch {
             try {
                 _signInRoomResponse.value = ResultState.Loading()
-                val param = SignInRoom.Param(uuid = baseUrl)
+                val param = SignInRoom.Param(uuid = baseUrl, bleBody)
                 signInRoom.execute(object : DefaultSubscriber<BleModel>() {
                     override fun onError(error: ResultState<BleModel>) {
                         Timber.e(Throwable(error.toString()))
