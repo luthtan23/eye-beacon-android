@@ -17,21 +17,13 @@
         android:layout_height="match_parent"
         android:background="@color/backgroundColor">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/secondaryDarkColor"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@color/primaryColor"
-            android:visibility="@{viewModel.hideProgress?View.GONE:View.VISIBLE}">
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminateTintMode="src_atop"
-                android:indeterminateTint="@color/secondaryDarkColor" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+            android:visibility="@{viewModel.hideProgress?View.GONE:View.VISIBLE}"/>
 
         <LinearLayout
             android:layout_width="match_parent"

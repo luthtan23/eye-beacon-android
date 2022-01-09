@@ -13,6 +13,7 @@
     <color name="gray">#AAAAAA</color>
 
     <color name="backgroundColor">#1c313a</color>
+    <color name="backgroundColor_d9">#1a1c313a</color>
     <color name="customColorSurface">#FFFFFF</color>
     <color name="customColorTextDefault">#ADFFFFFF</color>
 
