@@ -7,6 +7,7 @@ import android.os.RemoteException
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.luthtan.eye_beacon_android.BuildConfig
 import com.luthtan.eye_beacon_android.base.BaseFragment
 import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
 import com.luthtan.eye_beacon_android.base.util.KeyboardUtil
@@ -14,6 +15,7 @@ import com.luthtan.eye_beacon_android.databinding.FragmentDashboardBinding
 import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
 import com.luthtan.eye_beacon_android.features.dashboard.adapter.DashboardAdapter
+import com.luthtan.eye_beacon_android.features.dashboard.beacon.BluetoothManager
 import com.luthtan.eye_beacon_android.features.dashboard.service.EddyStoneService
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.FragmentScoped
@@ -74,8 +76,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     override fun onInitObservers() {
         super.onInitObservers()
 
-        viewModel.signInRoom(args.loginParams.localIP)
-
         viewModel.signInRoomResponse.observe(this, {
             when(it) {
                 is ResultState.Loading -> {
@@ -121,7 +121,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         try {
             beaconManager.startRangingBeaconsInRegion(
                 Region(
-                    "com.luthtan.eye_beacon_android",
+                    BuildConfig.APPLICATION_ID,
                     null,
                     null,
                     null
@@ -154,7 +154,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 //                        requireActivity().startService(getServiceIntent(requireContext()))
                         binding.imgDashboardNotFound.visibility = View.GONE
                         binding.tvDashboardNotFoundDescription.visibility = View.GONE
-//                        viewModel.setParams(args.loginParams)
+                        viewModel.signInRoom(args.loginParams.localIP)
                     }
                     flagAPI = true
                 } else {

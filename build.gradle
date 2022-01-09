@@ -18,7 +18,7 @@ buildscript {
         kotlinCoroutineAdapterFactoryVersion = "0.9.2"
 
         //room
-        roomVersion = '2.3.0'
+        roomVersion = '2.4.0'
 
         //navigation component
         nav_version = "2.3.5"

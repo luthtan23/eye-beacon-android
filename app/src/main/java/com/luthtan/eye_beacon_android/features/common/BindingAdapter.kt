@@ -4,14 +4,22 @@ import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import com.luthtan.eye_beacon_android.R
+import com.google.android.material.textfield.TextInputLayout
 import com.luthtan.eye_beacon_android.features.login.LoginListener
 
 object BindingAdapter {
+
+    @BindingAdapter("errorText")
+    @JvmStatic
+    fun TextInputLayout.bindErrorText(errorText: Int) {
+        if (errorText != 0) {
+            error = context.getString(errorText)
+        } else {
+            error = null
+        }
+    }
 
     @BindingAdapter(value = ["linkText", "listenerLink"])
     @JvmStatic

@@ -1,6 +1,7 @@
 package com.luthtan.eye_beacon_android.di
 
 import com.luthtan.eye_beacon_android.data.datasource.EyeBeaconDataSourceImpl
+import com.luthtan.eye_beacon_android.data.local.room.DashboardDao
 import com.luthtan.eye_beacon_android.data.mapper.SignInRoomMapper
 import com.luthtan.eye_beacon_android.data.remote.EyeBeaconApi
 import com.luthtan.eye_beacon_android.data.repository.EyeBeaconRepositoryImpl
@@ -18,9 +19,9 @@ import javax.inject.Singleton
 object EyeBeaconApiModule {
     @Singleton
     @Provides
-    fun provideEyeBeaconDataSource(eyeBeaconApi: EyeBeaconApi): EyeBeaconDataSource =
+    fun provideEyeBeaconDataSource(eyeBeaconApi: EyeBeaconApi, dashboardDao: DashboardDao): EyeBeaconDataSource =
         EyeBeaconDataSourceImpl(
-            eyeBeaconApi, SignInRoomMapper()
+            eyeBeaconApi, dashboardDao, SignInRoomMapper()
         )
 
     @Singleton
