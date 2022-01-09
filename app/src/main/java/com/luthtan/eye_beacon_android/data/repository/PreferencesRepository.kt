@@ -1,7 +1,7 @@
 package com.luthtan.simplebleproject.data.repository
 
 import com.luthtan.eye_beacon_android.data.local.preferences.PreferenceConstants
-import com.luthtan.simplebleproject.data.local.preferences.PreferenceHelper
+import com.luthtan.eye_beacon_android.data.local.preferences.PreferenceHelper
 
 
 class PreferencesRepository(private val preferences: PreferenceHelper) {

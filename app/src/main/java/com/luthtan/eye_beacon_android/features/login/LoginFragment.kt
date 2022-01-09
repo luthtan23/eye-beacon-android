@@ -1,12 +1,19 @@
 package com.luthtan.eye_beacon_android.features.login
 
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.luthtan.eye_beacon_android.R
 import com.luthtan.eye_beacon_android.base.BaseFragment
+import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
+import com.luthtan.eye_beacon_android.base.util.KeyboardUtil
 import com.luthtan.eye_beacon_android.databinding.FragmentLoginBinding
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.FragmentScoped
 
+@FragmentScoped
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     override val viewModel: LoginViewModel by viewModels()
@@ -22,6 +29,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     override fun onInitViews() {
         super.onInitViews()
 
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
         binding.listener = viewModel
 
@@ -42,22 +50,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
         viewModel.goToDashboard.observe(this, {
             it.getContentIfNotHandled()?.let { loginPage ->
-                var valid = true
-                if (loginPage.eyeBle.isEmpty()) {
-                    binding.etLoginUUID.error = getString(R.string.login_error_form)
-                    valid = false
-                }
-                if (loginPage.localIP.isEmpty()) {
-                    binding.etLoginLocalIP.error = getString(R.string.login_error_form)
-                    valid = false
-                }
-                if (loginPage.username.isEmpty()) {
-                    binding.etLoginUsername.error = getString(R.string.login_error_form)
-                    valid = false
-                }
-                if (valid) {
+                KeyboardUtil.hideKeyboard(requireActivity())
+                Handler(Looper.myLooper()!!).postDelayed({
+                    viewModel.setProgressLoading(false)
                     findNavController().navigate(LoginFragmentDirections.actionGoToDashboard(loginPage))
-                }
+                },50)
             }
         })
 
@@ -69,6 +66,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     }
 
-
+    override fun onPause() {
+        super.onPause()
+        viewModel.setProgressLoading(true)
+    }
 
 }

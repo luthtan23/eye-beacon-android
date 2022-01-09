@@ -1,21 +1,10 @@
 package com.luthtan.eye_beacon_android
 
-import android.app.Application
-import com.luthtan.eye_beacon_android.di.*
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.KoinComponent
-import org.koin.core.context.startKoin
+import com.luthtan.eye_beacon_android.base.BaseApplication
+import dagger.hilt.android.HiltAndroidApp
 
-class MyApplication : Application(), KoinComponent {
+@HiltAndroidApp
+class MyApplication : BaseApplication() {
+    override fun getBaseUrl(): String = "http://localhost:3000"
 
-    override fun onCreate() {
-        super.onCreate()
-
-        startKoin {
-            androidLogger()
-            androidContext(this@MyApplication)
-            modules(listOf(coreModule, databaseModule, repoModule, remoteModule, viewModelModule, bluetoothModule))
-        }
-    }
 }

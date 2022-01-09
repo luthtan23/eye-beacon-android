@@ -3,8 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
-    id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -63,14 +64,18 @@ dependencies {
     api("androidx.navigation:navigation-ui-ktx:$nav_version")
     api("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
 
-    /* Koin DI */
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    /* Hilt */
+    implementation "com.google.dagger:hilt-android:2.40.1"
+    kapt "com.google.dagger:hilt-android-compiler:2.40.1"
+
+    /* Hilt VM */
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
     // Network Library Retrofit dependencies
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpLogVersion"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$kotlinCoroutineAdapterFactoryVersion"
 
@@ -93,9 +98,13 @@ dependencies {
     implementation "org.altbeacon:android-beacon-library:$altBeacon"
 
     // RxJava & RxAndroid
+    implementation 'androidx.compose.runtime:runtime-rxjava2:1.0.0-beta01'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+
+    //log
+    implementation 'com.github.chuckerteam.chucker:library:3.5.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
 
 }

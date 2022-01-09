@@ -10,14 +10,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.luthtan.eye_beacon_android.databinding.FragmentPrivacyAgreementBinding
-import com.luthtan.eye_beacon_android.data.repository.dashboard.DashboardRepository
 import com.luthtan.eye_beacon_android.features.login.util.PRIVACY_AGREEMENT_TO_REGISTER_REQUEST_KEY
 import com.luthtan.eye_beacon_android.features.login.util.PRIVACY_AGREEMENT_TO_REGISTER_STATE_KEY
-import org.koin.android.ext.android.inject
 
 class PrivacyAgreementFragment : Fragment() {
 
-    private val dashboardRepository: DashboardRepository by inject()
+//    private val dashboardRepository: DashboardRepository by inject()
 
     private var _binding: FragmentPrivacyAgreementBinding? = null
     private val binding get() = _binding!!
