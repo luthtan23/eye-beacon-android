@@ -19,6 +19,7 @@ import com.luthtan.eye_beacon_android.domain.subscriber.DefaultSubscriber
 import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.altbeacon.beacon.Beacon
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -45,10 +46,14 @@ class DashboardViewModel @Inject constructor(
     private val _getHistoryListDao = MutableLiveData<ResultState<List<BleEntity>>>()
     val getHistoryListDao: LiveData<ResultState<List<BleEntity>>> = _getHistoryListDao
 
+    private val _storeBeacon = MutableLiveData<MutableList<Beacon>>()
+    val storeBeacon: LiveData<MutableList<Beacon>> = _storeBeacon
+
     private val stateBleAction = MutableLiveData(false)
 
     init {
         _bleActionTitle.value = myApplication.getString(R.string.dashboard_stop_bluetooth_activity)
+        _storeBeacon.value = mutableListOf()
     }
 
     fun initData(loginPage: LoginPage) {
@@ -94,6 +99,14 @@ class DashboardViewModel @Inject constructor(
             } catch (e: Exception) {
                 Timber.e(e)
             }
+        }
+    }
+
+    fun setBeaconList(storeBeaconData: Collection<Beacon>) {
+        storeBeacon.value?.let {
+            it.clear()
+            it.addAll(storeBeaconData)
+            _storeBeacon.value = it
         }
     }
 
