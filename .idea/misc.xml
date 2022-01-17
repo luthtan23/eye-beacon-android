@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/075097749/Desktop/eye-beacon-android/app/src/main/res/layout/fragment_dashboard.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/075097749/Desktop/eye-beacon-android/app/src/main/res/layout/fragment_login.xml" value="0.20520833333333333" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/drawable/ic_baseline_bluetooth_searching.xml" value="0.25833333333333336" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/activity_dashboard.xml" value="0.2421875" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/activity_login.xml" value="0.121875" />
@@ -14,7 +16,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
