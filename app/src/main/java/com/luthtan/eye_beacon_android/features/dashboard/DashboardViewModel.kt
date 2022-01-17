@@ -18,6 +18,7 @@ import com.luthtan.eye_beacon_android.domain.interactor.SignInRoom
 import com.luthtan.eye_beacon_android.domain.subscriber.DefaultSubscriber
 import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.altbeacon.beacon.Beacon
 import timber.log.Timber
@@ -49,11 +50,26 @@ class DashboardViewModel @Inject constructor(
     private val _storeBeacon = MutableLiveData<MutableList<Beacon>>()
     val storeBeacon: LiveData<MutableList<Beacon>> = _storeBeacon
 
+    private val _countDown = MutableLiveData<Int>()
+    val countDown: LiveData<Int> = _countDown
+
+    private val _automaticallySignIn = MutableLiveData<SingleEvents<Boolean>>()
+    val automaticallySignIn: LiveData<SingleEvents<Boolean>> = _automaticallySignIn
+
+    private val _stopBeacon = MutableLiveData<SingleEvents<Boolean>>()
+    val stopBeacon: LiveData<SingleEvents<Boolean>> = _stopBeacon
+
+    private val _dismissDialog = MutableLiveData<SingleEvents<Boolean>>()
+    val dismissDialog: LiveData<SingleEvents<Boolean>> = _dismissDialog
+
+    private var breakCount = false
+
     private val stateBleAction = MutableLiveData(false)
 
     init {
         _bleActionTitle.value = myApplication.getString(R.string.dashboard_stop_bluetooth_activity)
         _storeBeacon.value = mutableListOf()
+        _countDown.value = INIT_COUNT_DOWN
     }
 
     fun initData(loginPage: LoginPage) {
@@ -75,7 +91,7 @@ class DashboardViewModel @Inject constructor(
                         _signInRoomResponse.value = data
                     }
 
-                },param)
+                }, param)
             } catch (e: NetworkErrorException) {
                 Timber.e(e)
                 _signInRoomResponse.value = ResultState.Error(e)
@@ -130,15 +146,66 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
+    fun setCountDown() {
+        viewModelScope.launch {
+            for (i in INIT_COUNT_DOWN downTo 0) {
+                _countDown.value = i
+                delay(1000L)
+                if (breakCount) {
+                    setBreakCount(false)
+                    break
+                }
+                if (i == 0) {
+                    _dismissDialog.value = SingleEvents(true)
+                }
+            }
+        }
+    }
+
+    fun setBreakCount(state: Boolean) {
+        breakCount = state
+    }
+
+    fun setAutomaticallySignIn() {
+        _automaticallySignIn.value = SingleEvents(true)
+    }
+
+    fun setStopBeacon() {
+        _stopBeacon.value = SingleEvents(true)
+    }
+
+    fun setStopBeaconAction() {
+        stateBleAction.value = true
+        stateBleAction()
+    }
+
     override fun onBluetoothActivityClick() {
+        stateBleAction.value = !stateBleAction.value!!
+        stateBleAction()
+    }
+
+    private fun stateBleAction() {
         loginPageData.value.let {
             _loginPageData.value = it
         }
-        stateBleAction.value = !stateBleAction.value!!
-        when(stateBleAction.value!!) {
-            true -> _bleActionTitle.value = myApplication.getString(R.string.dashboard_start_bluetooth_activity)
-            false -> _bleActionTitle.value = myApplication.getString(R.string.dashboard_stop_bluetooth_activity)
+        when (stateBleAction.value!!) {
+            true -> _bleActionTitle.value =
+                myApplication.getString(R.string.dashboard_start_bluetooth_activity)
+            false -> _bleActionTitle.value =
+                myApplication.getString(R.string.dashboard_stop_bluetooth_activity)
         }
         _bluetoothActivityAction.value = SingleEvents(stateBleAction.value!!)
+    }
+
+    override fun onLeftDialogClicked() {
+
+    }
+
+    override fun onRightDialogClicked() {
+
+    }
+
+    companion object {
+        private const val INIT_COUNT_DOWN = 5
     }
 }
