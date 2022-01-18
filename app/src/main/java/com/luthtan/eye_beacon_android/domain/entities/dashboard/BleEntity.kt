@@ -9,11 +9,11 @@ import com.google.gson.annotations.SerializedName
 data class BleEntity(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
 
-    @field:SerializedName("uuid_user")
-    @ColumnInfo(defaultValue = "", name = "uuid_user")
-    val uuidUser: String,
+    @field:SerializedName("macAddress")
+    @ColumnInfo(defaultValue = "", name = "macAddress")
+    val macAddress: String,
 
     @field:SerializedName("room_user")
     @ColumnInfo(defaultValue = "", name = "room_user")
@@ -26,24 +26,24 @@ data class BleEntity(
     @field:SerializedName("time_in")
     @ColumnInfo(defaultValue = "", name = "time_in")
     val timeIn: String,
-
-    @field:SerializedName("time_out")
-    @ColumnInfo(defaultValue = "", name = "time_out")
-    val timeOut: String,
-
-    @field:SerializedName("status_user")
-    @ColumnInfo(defaultValue = "", name = "status_user")
-    val status: Boolean,
-
-    @field:SerializedName("name_user")
-    @ColumnInfo(defaultValue = "", name = "name_user")
-    val name: String,
-
-    @field:SerializedName("position_user")
-    @ColumnInfo(defaultValue = "", name = "position_user")
-    val position: String,
-
-    @field:SerializedName("number_person_in_room")
-    @ColumnInfo(defaultValue = "", name = "number_person_in_room")
-    val numberPersonInRoom: Int
+//
+//    @field:SerializedName("time_out")
+//    @ColumnInfo(defaultValue = "", name = "time_out")
+//    val timeOut: String,
+//
+//    @field:SerializedName("status_user")
+//    @ColumnInfo(defaultValue = "", name = "status_user")
+//    val status: Boolean,
+//
+//    @field:SerializedName("name_user")
+//    @ColumnInfo(defaultValue = "", name = "name_user")
+//    val name: String,
+//
+//    @field:SerializedName("position_user")
+//    @ColumnInfo(defaultValue = "", name = "position_user")
+//    val position: String,
+//
+//    @field:SerializedName("number_person_in_room")
+//    @ColumnInfo(defaultValue = "", name = "number_person_in_room")
+//    val numberPersonInRoom: Int
 )

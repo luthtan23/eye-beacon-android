@@ -93,7 +93,10 @@ dependencies {
 
     //epoxy
     implementation "com.airbnb.android:epoxy:$epoxyVersion"
-    annotationProcessor "com.airbnb.android:epoxy-processor:$epoxyVersion"
+    implementation "com.airbnb.android:epoxy-databinding:$epoxyVersion"
+    implementation "com.airbnb.android:epoxy-annotations:$epoxyVersion"
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
+    kaptTest "com.airbnb.android:epoxy-processor:$epoxyVersion"
 
     // ALT Beacon library
     implementation "org.altbeacon:android-beacon-library:$altBeacon"

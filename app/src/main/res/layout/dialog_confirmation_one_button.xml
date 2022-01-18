@@ -43,16 +43,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/desc" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="0.5dp"
-        android:layout_height="0dp"
-        android:background="@color/secondaryDarkColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnRight"
-        app:layout_constraintStart_toEndOf="@id/btnLeft"
-        app:layout_constraintTop_toBottomOf="@id/divider1" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnLeft"
         android:layout_width="0dp"
@@ -60,18 +50,9 @@
         android:textStyle="bold"
         android:background="@drawable/bg_rounded_white8_bottom_left"
         android:textColor="@color/btnColorText"
-        app:layout_constraintEnd_toStartOf="@+id/divider2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnRight"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_rounded_white8_bottom_right"
-        android:textColor="@color/btnColorText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/divider2"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

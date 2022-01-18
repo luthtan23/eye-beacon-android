@@ -9,14 +9,13 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
-import com.luthtan.eye_beacon_android.databinding.DialogConfirmationTwoButtonBinding
+import com.luthtan.eye_beacon_android.databinding.DialogConfirmationOneButtonBinding
 import timber.log.Timber
 
-class ConfirmationDialog : DialogFragment() {
+class ConfirmationDialogOneButton : DialogFragment() {
 
-    private var binding: DialogConfirmationTwoButtonBinding? = null
-    var onRightButtonClickListener: (DialogFragment, View) -> Unit = { _,_ -> }
-    var onLeftButtonClickListener: (DialogFragment, View) -> Unit = { _,_ -> }
+    private var binding: DialogConfirmationOneButtonBinding? = null
+    var onLeftButtonClickListener: (DialogFragment, View) -> Unit = { _, _ ->}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +23,9 @@ class ConfirmationDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         setStyle(STYLE_NO_TITLE, 0)
+
+        dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.setCanceledOnTouchOutside(true)
 
         dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.setCanceledOnTouchOutside(false)
@@ -34,7 +36,7 @@ class ConfirmationDialog : DialogFragment() {
             Timber.e(e)
         }
 
-        binding = DialogConfirmationTwoButtonBinding.inflate(layoutInflater)
+        binding = DialogConfirmationOneButtonBinding.inflate(layoutInflater)
 
         return binding?.root
     }
@@ -45,11 +47,9 @@ class ConfirmationDialog : DialogFragment() {
         arguments?.getString(ARGUMENT_TITLE)?.let { setTitle(it) }
         arguments?.getString(ARGUMENT_DESCRIPTION)?.let { setDescription(it) }
         arguments?.getString(ARGUMENT_LEFT_BUTTON_TEXT)?.let { setLeftButtonText(it) }
-        arguments?.getString(ARGUMENT_RIGHT_BUTTON_TEXT)?.let { setRightButtonText(it) }
         binding?.let {
             with(it) {
-                btnLeft.setOnClickListener { onLeftButtonClickListener.invoke(this@ConfirmationDialog, view) }
-                btnRight.setOnClickListener { onRightButtonClickListener.invoke(this@ConfirmationDialog, view) }
+                btnLeft.setOnClickListener { onLeftButtonClickListener.invoke(this@ConfirmationDialogOneButton, view) }
             }
         }
     }
@@ -83,33 +83,21 @@ class ConfirmationDialog : DialogFragment() {
         binding?.btnLeft?.setText(text)
     }
 
-
-    fun setRightButtonText(text: String) {
-        binding?.btnRight?.text = text
-    }
-
-    fun setRightButtonText(@StringRes text: Int) {
-        binding?.btnRight?.setText(text)
-    }
-
     companion object{
         private const val ARGUMENT_TITLE = "ARGUMENT_TITLE"
         private const val ARGUMENT_DESCRIPTION = "ARGUMENT_DESCRIPTION"
         private const val ARGUMENT_LEFT_BUTTON_TEXT = "ARGUMENT_LEFT_BUTTON_TEXT"
-        private const val ARGUMENT_RIGHT_BUTTON_TEXT = "ARGUMENT_RIGHT_BUTTON_TEXT"
 
         fun newInstance(
             title: String,
             description: String,
             leftBtnText: String,
-            rightBtnText: String
         ): ConfirmationDialog {
             return ConfirmationDialog().apply {
                 arguments = Bundle().apply {
                     putString(ARGUMENT_TITLE, title)
                     putString(ARGUMENT_DESCRIPTION, description)
                     putString(ARGUMENT_LEFT_BUTTON_TEXT, leftBtnText)
-                    putString(ARGUMENT_RIGHT_BUTTON_TEXT, rightBtnText)
                 }
             }
         }

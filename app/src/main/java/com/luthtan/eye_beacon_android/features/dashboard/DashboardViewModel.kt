@@ -18,6 +18,7 @@ import com.luthtan.eye_beacon_android.domain.interactor.SignInRoom
 import com.luthtan.eye_beacon_android.domain.subscriber.DefaultSubscriber
 import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.altbeacon.beacon.Beacon
@@ -46,6 +47,9 @@ class DashboardViewModel @Inject constructor(
 
     private val _getHistoryListDao = MutableLiveData<ResultState<List<BleEntity>>>()
     val getHistoryListDao: LiveData<ResultState<List<BleEntity>>> = _getHistoryListDao
+
+    private val _needRefreshRecycler = MutableLiveData<SingleEvents<Boolean>>()
+    val needRefreshRecycler: LiveData<SingleEvents<Boolean>> = _needRefreshRecycler
 
     private val _storeBeacon = MutableLiveData<MutableList<Beacon>>()
     val storeBeacon: LiveData<MutableList<Beacon>> = _storeBeacon
@@ -100,7 +104,7 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun insertHistory(bleEntity: BleEntity) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val param = InsertHistory.Param(bleEntity)
                 insertHistory.execute(object : DefaultSubscriber<Long>() {
@@ -109,7 +113,7 @@ class DashboardViewModel @Inject constructor(
                     }
 
                     override fun onSuccess(data: ResultState<Long>) {
-
+                        getHistoryList()
                     }
                 }, param)
             } catch (e: Exception) {
@@ -130,18 +134,22 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _getHistoryListDao.value = ResultState.Loading()
+                _needRefreshRecycler.value = SingleEvents(true)
                 getHistoryList.execute(object : DefaultSubscriber<List<BleEntity>>() {
                     override fun onError(error: ResultState<List<BleEntity>>) {
                         Timber.e(Throwable(error.toString()))
                         _getHistoryListDao.value = error
+                        _needRefreshRecycler.value = SingleEvents(true)
                     }
 
                     override fun onSuccess(data: ResultState<List<BleEntity>>) {
                         _getHistoryListDao.value = data
+                        _needRefreshRecycler.value = SingleEvents(true)
                     }
                 }, null)
             } catch (e: Exception) {
                 Timber.e(e)
+                _needRefreshRecycler.value = SingleEvents(true)
             }
         }
     }
