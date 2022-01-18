@@ -88,4 +88,7 @@
     <string name="privacy_agreement_accept_text">Accept</string>
     <string name="local_ip">Local IP</string>
     <string name="login_error_form">Please Fill Data</string>
+    <string name="dashboard_dialog_sign">SIGN</string>
+    <string name="dashboard_dialog_stop">STOP</string>
+    <string name="dashboard_dialog_title">You are still in room.\nSystem will automatically change your status to Sign In.</string>
 </resources>

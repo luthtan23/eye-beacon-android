@@ -30,6 +30,7 @@
     <color name="dim_foreground_inverse_holo_dark">#323232</color>
 
     <color name="linkTextColorLightMode">#5688DC</color>
+    <color name="btnColorText">#24a0ed</color>
 
 
 </resources>

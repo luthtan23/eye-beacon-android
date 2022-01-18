@@ -7,7 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
 import android.os.Looper
-import com.luthtan.eye_beacon_android.features.dashboard.DashboardFragment
+import com.luthtan.eye_beacon_android.domain.dtos.BluetoothState
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import timber.log.Timber
@@ -21,7 +21,7 @@ class BluetoothManager @Inject constructor(
     private val context: Context
 ) {
 
-    private val subject: BehaviorProcessor<DashboardFragment.BluetoothState> =
+    private val subject: BehaviorProcessor<BluetoothState> =
         BehaviorProcessor.createDefault(
             getStateFromAdapterState(
                 adapter?.state ?: BluetoothAdapter.STATE_OFF
@@ -41,7 +41,7 @@ class BluetoothManager @Inject constructor(
                         BluetoothAdapter.ERROR
                     )
                 )
-                if (state == DashboardFragment.BluetoothState.STATE_TURNING_OFF) {
+                if (state == BluetoothState.STATE_TURNING_OFF) {
                     Handler(Looper.getMainLooper()).postDelayed({
                         adapter?.enable()
                     }, TIME_BLUETOOTH_CHECKED)
@@ -50,13 +50,13 @@ class BluetoothManager @Inject constructor(
         }
     }
 
-    fun getStateFromAdapterState(state: Int): DashboardFragment.BluetoothState {
+    fun getStateFromAdapterState(state: Int): BluetoothState {
         return when (state) {
-            BluetoothAdapter.STATE_OFF -> DashboardFragment.BluetoothState.STATE_OFF
-            BluetoothAdapter.STATE_TURNING_OFF -> DashboardFragment.BluetoothState.STATE_TURNING_OFF
-            BluetoothAdapter.STATE_ON -> DashboardFragment.BluetoothState.STATE_ON
-            BluetoothAdapter.STATE_TURNING_ON -> DashboardFragment.BluetoothState.STATE_TURNING_ON
-            else -> DashboardFragment.BluetoothState.STATE_OFF
+            BluetoothAdapter.STATE_OFF -> BluetoothState.STATE_OFF
+            BluetoothAdapter.STATE_TURNING_OFF -> BluetoothState.STATE_TURNING_OFF
+            BluetoothAdapter.STATE_ON -> BluetoothState.STATE_ON
+            BluetoothAdapter.STATE_TURNING_ON -> BluetoothState.STATE_TURNING_ON
+            else -> BluetoothState.STATE_OFF
         }
     }
 
@@ -64,7 +64,7 @@ class BluetoothManager @Inject constructor(
 
     fun enable() = adapter?.enable()
 
-    fun asFlowable(): Flowable<DashboardFragment.BluetoothState> {
+    fun asFlowable(): Flowable<BluetoothState> {
         return subject
     }
 

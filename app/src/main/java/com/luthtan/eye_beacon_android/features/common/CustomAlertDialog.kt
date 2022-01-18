@@ -1,10 +1,8 @@
-package com.luthtan.simplebleproject.common
+package com.luthtan.eye_beacon_android.features.common
 
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import com.luthtan.eye_beacon_android.features.common.CANCEL_TEXT
-import com.luthtan.eye_beacon_android.features.common.OK_TEXT
 
 class CustomAlertDialog(
     private val context: Context, private val title: String?,

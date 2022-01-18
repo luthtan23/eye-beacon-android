@@ -26,13 +26,12 @@
         <item name="colorBackgroundFloating">@color/background_holo_light</item>
         <item name="linkColor">@color/linkTextColorLightMode</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:windowBackground">@color/backgroundColor</item>
         <item name="colorControlHighlight">@color/darker_gray</item>
         <item name="android:navigationBarColor">@color/customNavigationBarButton</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
 
         <item name="materialButtonStyle">@style/CustomButtonStyle</item>
         <item name="textInputStyle">@style/CustomTextFieldStyle</item>
+        <item name="android:windowLightStatusBar">false</item>
 
     </style>
 
