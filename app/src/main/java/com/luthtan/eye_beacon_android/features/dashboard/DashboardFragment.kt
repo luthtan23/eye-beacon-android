@@ -8,16 +8,19 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.luthtan.eye_beacon_android.BuildConfig
+import com.luthtan.eye_beacon_android.R
 import com.luthtan.eye_beacon_android.base.BaseFragment
-import com.luthtan.eye_beacon_android.base.util.AlertLocationDialog
 import com.luthtan.eye_beacon_android.base.util.DOMAIN_URL
+import com.luthtan.eye_beacon_android.base.util.DateFormatter
 import com.luthtan.eye_beacon_android.base.util.KeyboardUtil
+import com.luthtan.eye_beacon_android.dashboardHistory
+import com.luthtan.eye_beacon_android.dashboardHistoryEmpty
 import com.luthtan.eye_beacon_android.databinding.FragmentDashboardBinding
 import com.luthtan.eye_beacon_android.domain.dtos.BleBody
 import com.luthtan.eye_beacon_android.domain.dtos.StateStage
+import com.luthtan.eye_beacon_android.domain.entities.dashboard.BleEntity
 import com.luthtan.eye_beacon_android.domain.subscriber.ResultState
-import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
-import com.luthtan.eye_beacon_android.features.dashboard.adapter.DashboardAdapter
+import com.luthtan.eye_beacon_android.features.common.dialog.DialogHelper
 import com.luthtan.eye_beacon_android.features.dashboard.beacon.BluetoothManager
 import com.luthtan.eye_beacon_android.features.dashboard.service.EddyStoneService
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,10 +42,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         FragmentDashboardBinding.inflate(layoutInflater)
     }
 
-    private val dashboardAdapter by lazy {
-        DashboardAdapter()
-    }
-
     private val args: DashboardFragmentArgs by navArgs()
 
     private var flagAPI = false
@@ -51,8 +50,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     private var indexBeacon = 0
     private var count = 0
     private var countIdle = 0
-
-    private lateinit var beaconData: Beacon
 
     @Inject
     lateinit var bluetoothState: BluetoothManager
@@ -77,8 +74,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         binding.viewModel = viewModel
         binding.listener = viewModel
 
-        binding.rvDashboardHistory.adapter = dashboardAdapter
-
         viewModel.initData(args.loginParams)
 
         with(bluetoothState) {
@@ -87,6 +82,9 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
         initUuid = args.loginParams.uuid
 
+        initRecyclerView()
+        viewModel.getHistoryList()
+
     }
 
     override fun onInitObservers() {
@@ -94,13 +92,37 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
         viewModel.signInRoomResponse.observe(this, {
             when (it) {
-                is ResultState.Loading -> {
-                    showToast("Loading")
-                    flagAPI = true
-                }
+                is ResultState.Loading -> {}
                 is ResultState.Success -> {
-                    showToast(it.data.status.toString())
-                    flagAPI = true
+                    try {
+                        showToast(it.data.status.toString())
+                        flagAPI = true
+                        when(it.data.status?.isInside) {
+                            true -> {
+                                DialogHelper.showConfirmationDialogOneButtonNoTitle(
+                                    childFragmentManager,
+                                    getString(R.string.dashboard_success_msg),
+                                    getString(R.string.close),
+                                    actionRightBtn = { dialogFragment, _ ->
+                                        dialogFragment.dismiss()
+                                    }
+                                )
+                            }
+                            false -> {
+                                viewModel.insertHistory(
+                                    BleEntity(
+                                        macAddress = initUuid,
+                                        room = it.data.status.room!!,
+                                        date = DateFormatter.currentDate(),
+                                        timeIn = DateFormatter.currentTime()
+                                    )
+                                )
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e)
+                        showToast("Failed retrieve data!")
+                    }
                 }
                 is ResultState.Error -> {
                     Timber.e(it.throwable)
@@ -138,6 +160,12 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
             }
         })
 
+        viewModel.needRefreshRecycler.observe(this, {
+            it.getContentIfNotHandled()?.let {
+                binding.rvDashboardHistory.requestModelBuild()
+            }
+        })
+
 //        lifecycleScope.launch {
 //            delay(500L)
 //            dashboardDialog.show(childFragmentManager, "DashboardDialog")
@@ -145,9 +173,8 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
         viewModel.storeBeacon.observe(this, { beacons ->
             if (beacons.isNotEmpty()) {
-                beacons.find { !it.bluetoothAddress.equals(initUuid) }?.let { beacon ->
+                beacons.find { !it.bluetoothAddress.equals(initUuid) }?.let {
                     if (mStateStage == StateStage.STATE_INIT && indexBeacon != -1) {
-                        beaconData = beacon
                         viewModel.signInRoom(
                             args.loginParams.localIP.plus(DOMAIN_URL),
                             BleBody(name = args.loginParams.username, true)
@@ -159,15 +186,22 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                             BleBody(name = args.loginParams.username, false)
                         )
                         mStateStage = StateStage.STATE_IDLE
-                    } else if (mStateStage == StateStage.STATE_IDLE) {
+                    } else if (mStateStage == StateStage.STATE_IDLE) {  // for identify user still inside area after sign out
                         countIdle++
                         if (countIdle == COUNT_IDLE) {
                             dashboardDialog.show(childFragmentManager, "DashboardDialog")
                         }
                     }
                 }
-                if (mStateStage == StateStage.STATE_IN && indexBeacon == -1 && flagAPI) {
-                    mStateStage = StateStage.STATE_OUT
+                // for identify user was in room
+                when (indexBeacon == -1) {
+                    mStateStage == StateStage.STATE_IN && flagAPI -> mStateStage =
+                        StateStage.STATE_OUT
+                    mStateStage == StateStage.STATE_IDLE -> {
+                        mStateStage = StateStage.STATE_INIT
+                        flagAPI = false
+                    }
+                    else -> countIdle = 0
                 }
             } else {
                 if (mStateStage == StateStage.STATE_IN && flagAPI) {
@@ -175,6 +209,35 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 }
             }
         })
+    }
+
+    private fun initRecyclerView() {
+        binding.rvDashboardHistory.withModels {
+            viewModel.getHistoryListDao.value?.let {
+                when (it) {
+                    is ResultState.Loading -> {
+                        showToast("Loading History")
+                    }
+                    is ResultState.Success -> {
+                        if (it.data.isNotEmpty()) {
+                            it.data.forEachIndexed { index, bleEntity ->
+                                dashboardHistory {
+                                    id("$index")
+                                    model(bleEntity)
+                                }
+                            }
+                        } else {
+                            dashboardHistoryEmpty {
+                                id("emptyId $id")
+                            }
+                        }
+                    }
+                    is ResultState.Error -> {
+
+                    }
+                }
+            }
+        }
     }
 
     private fun unbindBeaconManager() {
@@ -227,15 +290,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
     private fun getServiceIntent(context: Context): Intent {
         return Intent(context, EddyStoneService::class.java)
-    }
-
-    override fun onRequestResult(granted: Boolean) {
-        super.onRequestResult(granted)
-        if (!granted) {
-            AlertLocationDialog.showRequestPermission(requireContext()) {
-                permissionRequestLauncher.launch(arrayOf(PERMISSION_LOCATION_FINE))
-            }
-        }
     }
 
     private fun startScan() {
@@ -299,7 +353,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
     companion object {
         const val COUNT_TASK = 5
-        const val COUNT_IDLE = 60
+        const val COUNT_IDLE = 30
     }
 
 }

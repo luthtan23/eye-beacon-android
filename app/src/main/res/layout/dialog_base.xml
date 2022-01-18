@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="desc"
+            type="String" />
+        <variable
+            name="showProgress"
+            type="Boolean" />
+        <variable
+            name="btnTitle"
+            type="String" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="40dp"
+        android:orientation="vertical"
+        android:background="@color/secondaryColor"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/dialogBaseTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:text="@{title}"
+            android:visibility="@{showProgress?View.GONE:View.VISIBLE}"/>
+
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:visibility="@{showProgress?View.VISIBLE:View.GONE}"/>
+
+        <TextView
+            android:id="@+id/dialogBaseDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            android:text="@{desc}"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:text="@{!btnTitle.empty ? btnTitle : `Close`}"
+            android:layout_marginTop="20dp"
+            app:cornerRadius="29dp"
+            android:paddingHorizontal="24dp"
+            android:visibility="@{showProgress?View.GONE:View.VISIBLE}"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
