@@ -298,6 +298,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         }
 
         if (!beaconManager.isBound(this)) {
+            showToast("Scanning")
             beaconManager.bind(this)
             beaconManager.backgroundMode = false
             Timber.d("Switch from background mode!")

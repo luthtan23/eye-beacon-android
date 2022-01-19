@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.luthtan.eye_beacon_android.features.dashboard.DashboardViewModel" />
+
         <variable
             name="listener"
             type="com.luthtan.eye_beacon_android.features.dashboard.DashboardListener" />
@@ -15,8 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/backgroundColor">
+        android:background="@color/backgroundColor"
+        android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_dashboard_greeting"
@@ -162,6 +164,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
+                    android:clickable="@{viewModel.isActiveTextfield()}"
+                    android:focusable="@{viewModel.isActiveTextfield()}"
+                    android:focusableInTouchMode="@{viewModel.isActiveTextfield()}"
                     android:textColorHint="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:expandedHintEnabled="false"
@@ -189,11 +194,11 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
+                    android:onClick="@{() -> listener.onBluetoothActivityClick()}"
                     android:text="@{viewModel.bleActionTitle}"
                     android:textColor="@color/black"
-                    android:onClick="@{() -> listener.onBluetoothActivityClick()}"
-                    tools:text="@string/dashboard_stop_bluetooth_activity"
-                    app:layout_constraintTop_toBottomOf="@+id/textlayout_dashboard_uuid" />
+                    app:layout_constraintTop_toBottomOf="@+id/textlayout_dashboard_uuid"
+                    tools:text="@string/dashboard_stop_bluetooth_activity" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -222,8 +227,7 @@
             android:layoutAnimation="@anim/layout_animation"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_detail_user_description"
-            tools:listitem="@layout/item_dashboard_detail" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_detail_user_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
