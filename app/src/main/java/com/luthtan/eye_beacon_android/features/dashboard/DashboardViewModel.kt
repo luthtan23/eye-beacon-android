@@ -66,6 +66,9 @@ class DashboardViewModel @Inject constructor(
     private val _dismissDialog = MutableLiveData<SingleEvents<Boolean>>()
     val dismissDialog: LiveData<SingleEvents<Boolean>> = _dismissDialog
 
+    private val _isActiveTextfield = MutableLiveData<Boolean>()
+    val isActiveTextfield: LiveData<Boolean> = _isActiveTextfield
+
     private var breakCount = false
 
     private val stateBleAction = MutableLiveData(false)
@@ -74,6 +77,7 @@ class DashboardViewModel @Inject constructor(
         _bleActionTitle.value = myApplication.getString(R.string.dashboard_stop_bluetooth_activity)
         _storeBeacon.value = mutableListOf()
         _countDown.value = INIT_COUNT_DOWN
+        _isActiveTextfield.value = true
     }
 
     fun initData(loginPage: LoginPage) {
@@ -92,6 +96,7 @@ class DashboardViewModel @Inject constructor(
                     }
 
                     override fun onSuccess(data: ResultState<BleModel>) {
+                        _isActiveTextfield.value = !bleBody.isInside
                         _signInRoomResponse.value = data
                     }
 
@@ -164,22 +169,14 @@ class DashboardViewModel @Inject constructor(
                     break
                 }
                 if (i == 0) {
-                    _dismissDialog.value = SingleEvents(true)
+                    onRightDialogClicked()
                 }
             }
         }
     }
 
-    fun setBreakCount(state: Boolean) {
+    private fun setBreakCount(state: Boolean) {
         breakCount = state
-    }
-
-    fun setAutomaticallySignIn() {
-        _automaticallySignIn.value = SingleEvents(true)
-    }
-
-    fun setStopBeacon() {
-        _stopBeacon.value = SingleEvents(true)
     }
 
     fun setStopBeaconAction() {
@@ -206,11 +203,14 @@ class DashboardViewModel @Inject constructor(
     }
 
     override fun onLeftDialogClicked() {
-
+        _stopBeacon.value = SingleEvents(true)
+        _dismissDialog.value = SingleEvents(true)
     }
 
     override fun onRightDialogClicked() {
-
+        setBreakCount(true)
+        _automaticallySignIn.value = SingleEvents(true)
+        _dismissDialog.value = SingleEvents(true)
     }
 
     companion object {

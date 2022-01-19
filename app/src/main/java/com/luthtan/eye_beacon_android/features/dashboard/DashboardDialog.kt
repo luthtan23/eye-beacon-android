@@ -50,20 +50,8 @@ class DashboardDialog : DialogFragment() {
 
         viewModel.dismissDialog.observe(this, {
             it.getContentIfNotHandled()?.let {
-                viewModel.setStopBeacon()
                 dismiss()
             }
         })
-
-        binding?.btnRight?.setOnClickListener {
-            viewModel.setBreakCount(true)
-            viewModel.setAutomaticallySignIn()
-            dismiss()
-        }
-
-        binding?.btnLeft?.setOnClickListener {
-            viewModel.setStopBeacon()
-            dismiss()
-        }
     }
 }

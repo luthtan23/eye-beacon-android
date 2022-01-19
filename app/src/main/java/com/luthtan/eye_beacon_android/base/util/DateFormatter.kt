@@ -15,7 +15,7 @@ object DateFormatter {
     @SuppressLint("SimpleDateFormat")
     fun currentTime(): String {
         val formatter = SimpleDateFormat("HH:mm")
-        return formatter.format(getCurrentDateTime()) + "WIB"
+        return formatter.format(getCurrentDateTime()) + " WIB"
     }
 
     fun getCurrentDateTime(): Date {
