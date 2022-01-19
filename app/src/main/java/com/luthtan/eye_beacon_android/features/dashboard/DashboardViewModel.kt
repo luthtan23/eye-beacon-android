@@ -214,6 +214,6 @@ class DashboardViewModel @Inject constructor(
     }
 
     companion object {
-        private const val INIT_COUNT_DOWN = 5
+        private const val INIT_COUNT_DOWN = 60
     }
 }

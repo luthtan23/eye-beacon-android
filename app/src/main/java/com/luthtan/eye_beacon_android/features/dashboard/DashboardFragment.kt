@@ -95,7 +95,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 is ResultState.Loading -> {}
                 is ResultState.Success -> {
                     try {
-                        showToast(it.data.status.toString())
                         flagAPI = true
                         when(it.data.status?.isInside) {
                             true -> {
