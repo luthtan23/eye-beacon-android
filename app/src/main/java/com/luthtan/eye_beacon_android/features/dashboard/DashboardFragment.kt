@@ -92,7 +92,9 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
         viewModel.signInRoomResponse.observe(this, {
             when (it) {
-                is ResultState.Loading -> {}
+                is ResultState.Loading -> {
+                    showToast("Sending API...")
+                }
                 is ResultState.Success -> {
                     try {
                         flagAPI = true
@@ -125,6 +127,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 }
                 is ResultState.Error -> {
                     Timber.e(it.throwable)
+                    showToast("Failed get data, please check your connection or Web Service")
                 }
             }
         })
@@ -132,6 +135,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         viewModel.bluetoothActivityAction.observe(this, {
             it.getContentIfNotHandled()?.let { state ->
                 KeyboardUtil.hideKeyboard(requireActivity())
+                setDefaultState()
                 when (state) {
                     true -> stopBluetoothActivity()
                     false -> startBluetoothActivity()
@@ -148,8 +152,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
         viewModel.automaticallySignIn.observe(this, {
             it.getContentIfNotHandled()?.let {
-                mStateStage = StateStage.STATE_INIT
-                flagAPI = false
+                setDefaultState()
             }
         })
 
@@ -172,7 +175,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
         viewModel.storeBeacon.observe(this, { beacons ->
             if (beacons.isNotEmpty()) {
-                beacons.find { !it.bluetoothAddress.equals(initUuid) }?.let {
+                beacons.find { it.bluetoothAddress.equals(initUuid) }?.let {
                     if (mStateStage == StateStage.STATE_INIT && indexBeacon != -1) {
                         viewModel.signInRoom(
                             args.loginParams.localIP.plus(DOMAIN_URL),
@@ -194,8 +197,10 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 }
                 // for identify user was in room
                 when (indexBeacon == -1) {
-                    mStateStage == StateStage.STATE_IN && flagAPI -> mStateStage =
-                        StateStage.STATE_OUT
+                    mStateStage == StateStage.STATE_IN && flagAPI -> {
+                        mStateStage = StateStage.STATE_OUT
+                        showToast("Change state, you are in room")
+                    }
                     mStateStage == StateStage.STATE_IDLE -> {
                         mStateStage = StateStage.STATE_INIT
                         flagAPI = false
@@ -204,6 +209,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 }
             } else {
                 if (mStateStage == StateStage.STATE_IN && flagAPI) {
+                    showToast("Change state, you are in room")
                     mStateStage = StateStage.STATE_OUT
                 }
             }
@@ -349,6 +355,11 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         } catch (e: Exception) {
             Timber.e(e)
         }
+    }
+
+    private fun setDefaultState() {
+        mStateStage = StateStage.STATE_INIT
+        flagAPI = false
     }
 
     companion object {
