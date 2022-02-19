@@ -1,9 +1,8 @@
-package com.luthtan.simplebleproject.common
+package com.luthtan.eye_beacon_android.features.common
 
 import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 

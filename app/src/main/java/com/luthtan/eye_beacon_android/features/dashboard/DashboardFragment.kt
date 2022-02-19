@@ -90,7 +90,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     override fun onInitObservers() {
         super.onInitObservers()
 
-        viewModel.signInRoomResponse.observe(this, {
+        viewModel.signInRoomResponse.observe(this) {
             when (it) {
                 is ResultState.Loading -> {
                     showToast("Sending API...")
@@ -98,7 +98,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 is ResultState.Success -> {
                     try {
                         flagAPI = true
-                        when(it.data.status?.isInside) {
+                        when (it.data.status?.isInside) {
                             true -> {
                                 DialogHelper.showConfirmationDialogOneButtonNoTitle(
                                     childFragmentManager,
@@ -130,9 +130,9 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                     showToast("Failed get data, please check your connection or Web Service")
                 }
             }
-        })
+        }
 
-        viewModel.bluetoothActivityAction.observe(this, {
+        viewModel.bluetoothActivityAction.observe(this) {
             it.getContentIfNotHandled()?.let { state ->
                 KeyboardUtil.hideKeyboard(requireActivity())
                 setDefaultState()
@@ -141,39 +141,39 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                     false -> startBluetoothActivity()
                 }
             }
-        })
+        }
 
-        viewModel.loginPageData.observe(this, {
+        viewModel.loginPageData.observe(this) {
             if (it.uuid != initUuid) {
                 showToast("You've been changed UUID")
                 initUuid = it.uuid
             }
-        })
+        }
 
-        viewModel.automaticallySignIn.observe(this, {
+        viewModel.automaticallySignIn.observe(this) {
             it.getContentIfNotHandled()?.let {
                 setDefaultState()
             }
-        })
+        }
 
-        viewModel.stopBeacon.observe(this, {
+        viewModel.stopBeacon.observe(this) {
             it.getContentIfNotHandled()?.let {
                 viewModel.setStopBeaconAction()
             }
-        })
+        }
 
-        viewModel.needRefreshRecycler.observe(this, {
+        viewModel.needRefreshRecycler.observe(this) {
             it.getContentIfNotHandled()?.let {
                 binding.rvDashboardHistory.requestModelBuild()
             }
-        })
+        }
 
 //        lifecycleScope.launch {
 //            delay(500L)
 //            dashboardDialog.show(childFragmentManager, "DashboardDialog")
 //        }
 
-        viewModel.storeBeacon.observe(this, { beacons ->
+        viewModel.storeBeacon.observe(this) { beacons ->
             if (beacons.isNotEmpty()) {
                 beacons.find { it.bluetoothAddress.equals(initUuid) }?.let {
                     if (mStateStage == StateStage.STATE_INIT && indexBeacon != -1) {
@@ -213,7 +213,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                     mStateStage = StateStage.STATE_OUT
                 }
             }
-        })
+        }
     }
 
     private fun initRecyclerView() {

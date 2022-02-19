@@ -7,6 +7,8 @@
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/drawable-xxhdpi/bg_rounded_white8_bottom_right.xml" value="0.125" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/drawable/dialog_dashboard_count.xml" value="0.1296875" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/drawable/ic_baseline_bluetooth_searching.xml" value="0.25833333333333336" />
+        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/drawable/ic_baseline_link_24.xml" value="0.183" />
+        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/drawable/ic_baseline_person_outline.xml" value="0.183" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/drawable/splash_background.xml" value="0.13802083333333334" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/activity_dashboard.xml" value="0.2421875" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/activity_login.xml" value="0.121875" />
@@ -16,11 +18,13 @@
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/dialog_confirmation_one_button_without_title.xml" value="0.2421875" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/dialog_confirmation_two_button.xml" value="0.4" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/dialog_dashboard_count.xml" value="0.264" />
+        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/dialog_loading.xml" value="0.536" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/dialog_location_permission.xml" value="0.264" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/epoxy_layout_dashboard_history.xml" value="0.4" />
-        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/epoxy_layout_dashboard_history_empty.xml" value="0.1" />
-        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/fragment_dashboard.xml" value="0.234375" />
-        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/fragment_login.xml" value="0.264" />
+        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/epoxy_layout_dashboard_history_empty.xml" value="0.4" />
+        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/fragment_dashboard.xml" value="0.264" />
+        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/fragment_login.xml" value="0.2" />
+        <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/fragment_testing.xml" value="0.2421875" />
         <entry key="..\:/muh/Universitas Padjadjaran/Jetpack/eyebeaconandroid/app/src/main/res/layout/item_dashboard_detail.xml" value="0.4" />
       </map>
     </option>

@@ -17,14 +17,6 @@
         android:layout_height="match_parent"
         android:background="@color/backgroundColor">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTintMode="src_atop"
-            android:indeterminateTint="@color/secondaryDarkColor"
-            android:layout_gravity="center"
-            android:visibility="@{viewModel.hideProgress?View.GONE:View.VISIBLE}"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -40,56 +32,63 @@
                 android:textColor="@color/white"
                 android:textSize="32sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="24dp"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textlayout_login_uuid_description"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginBottom="16dp"
-                errorText="@{viewModel.errorForm.uuid}"
-                app:startIconDrawable="@drawable/ic_baseline_bluetooth_searching">
+                app:cardBackgroundColor="@color/primaryLightColor"
+                app:cardCornerRadius="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etLoginUUID"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/uuid"
+                    android:hint="@string/mac_address"
                     android:inputType="text"
-                    android:text="B8:27:EB:DB:4E:9A"
                     android:padding="16dp"
+                    errorText="@{viewModel.errorForm.uuid}"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_baseline_bluetooth_searching"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
                     android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textlayout_login_local_ip_description"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:hint="@string/local_ip"
-                errorText="@{viewModel.errorForm.localIP}"
-                app:startIconDrawable="@drawable/ic_baseline_link_24">
+                app:cardBackgroundColor="@color/primaryLightColor"
+                app:cardCornerRadius="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etLoginLocalIP"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    errorText="@{viewModel.errorForm.localIP}"
+                    android:layout_height="match_parent"
                     android:inputType="text"
-                    android:text="http://192.168.0.101:5001"
                     android:padding="16dp"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_baseline_link_24"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/white"
+                    android:hint="@string/endpoint"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
                     android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textlayout_login_username_description"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                errorText="@{viewModel.errorForm.username}"
-                app:startIconDrawable="@drawable/ic_baseline_person_outline">
+                app:cardBackgroundColor="@color/primaryLightColor"
+                app:cardCornerRadius="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etLoginUsername"
@@ -98,9 +97,15 @@
                     android:hint="@string/username"
                     android:inputType="text"
                     android:padding="16dp"
-                    android:textSize="16sp"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
+                    errorText="@{viewModel.errorForm.username}"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_baseline_person_outline"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/white"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login_login"
@@ -117,25 +122,6 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true">-->
-
-<!--            <com.google.android.material.textview.MaterialTextView-->
-<!--                android:id="@+id/tv_login_register"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginBottom="20dp"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/login_register_description"-->
-<!--                android:textColor="?attr/colorOnSecondary"-->
-<!--                android:textColorLink="?attr/linkColor"-->
-<!--                android:textSize="16sp"-->
-<!--                linkText="register"/>-->
-
-<!--        </RelativeLayout>-->
 
     </FrameLayout>
 

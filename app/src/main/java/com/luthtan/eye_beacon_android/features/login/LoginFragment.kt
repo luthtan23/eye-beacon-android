@@ -9,6 +9,7 @@ import com.luthtan.eye_beacon_android.base.util.KeyboardUtil
 import com.luthtan.eye_beacon_android.databinding.FragmentLoginBinding
 import com.luthtan.eye_beacon_android.features.common.PERMISSION_LOCATION_FINE
 import com.luthtan.eye_beacon_android.features.common.dialog.DialogHelper
+import com.luthtan.eye_beacon_android.features.common.dialog.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.delay
@@ -51,16 +52,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     override fun onInitObservers() {
         super.onInitObservers()
 
-        viewModel.goToDashboard.observe(this, {
+        viewModel.goToDashboard.observe(this) {
             it.getContentIfNotHandled()?.let { loginPage ->
                 KeyboardUtil.hideKeyboard(requireActivity())
+                val loadingDialog = LoadingDialog.newInstance()
+                loadingDialog.show(childFragmentManager)
                 lifecycleScope.launch {
                     delay(50L)
-                    viewModel.setProgressLoading(false)
-                    findNavController().navigate(LoginFragmentDirections.actionGoToDashboard(loginPage))
+                    loadingDialog.dismiss()
+                    findNavController().navigate(
+                        LoginFragmentDirections.actionGoToDashboard(
+                            loginPage
+                        )
+                    )
                 }
             }
-        })
+        }
 
         /*viewModel.goToRegister.observe(this, {
             it.getContentIfNotHandled()?.let {
@@ -68,11 +75,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
             }
         })*/
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.setProgressLoading(true)
     }
 
 }

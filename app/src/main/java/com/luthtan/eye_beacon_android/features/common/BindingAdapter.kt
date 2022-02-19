@@ -6,14 +6,14 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textfield.TextInputEditText
 import com.luthtan.eye_beacon_android.features.login.LoginListener
 
 object BindingAdapter {
 
     @BindingAdapter("errorText")
     @JvmStatic
-    fun TextInputLayout.bindErrorText(errorText: Int) {
+    fun TextInputEditText.bindErrorText(errorText: Int) {
         if (errorText != 0) {
             error = context.getString(errorText)
         } else {

@@ -46,12 +46,12 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view_dashboard_user"
             android:layout_width="match_parent"
-            android:layout_height="290dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            app:cardBackgroundColor="@color/secondaryColor"
-            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/grey_f5f5f5"
+            app:cardCornerRadius="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_greeting">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,7 +64,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
                     android:ellipsize="end"
                     android:lines="1"
@@ -72,6 +72,7 @@
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    tools:text="name"
                     app:layout_constraintEnd_toStartOf="@+id/card_dashboard_detail_room"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/card_dashboard_detail_room" />
@@ -82,17 +83,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
-                    android:text="@{viewModel.loginPageData.localIP ?? @string/position}"
+                    android:text="@string/position_hard_code"
                     android:textColor="@color/black"
                     android:textSize="14sp"
+                    tools:text="Main Developer"
                     app:layout_constraintEnd_toEndOf="@+id/tv_dashboard_username"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_username" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_dashboard_detail_room"
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
+                    android:layout_width="115dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="16dp"
                     android:backgroundTint="@color/white"
@@ -105,100 +107,57 @@
                         android:layout_height="match_parent">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_dashboard_room_title"
-                            android:layout_width="match_parent"
+                            android:id="@+id/tv_dashboard_room_description"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/room_title"
+                            android:layout_marginEnd="8dp"
+                            android:text="Room A"
                             android:textColor="@color/black"
-                            android:textSize="12sp"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/img_location"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_dashboard_room_description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/sample_room"
-                            android:textColor="@color/black"
-                            android:textSize="24sp"
-                            app:layout_constraintBottom_toTopOf="@+id/iv_dashboard_room"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_room_title" />
-
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_dashboard_room"
+                            android:id="@+id/img_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:src="@drawable/ic_baseline_groups_24"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/guideline_dashboard_room" />
-
-                        <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guideline_dashboard_room"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.5" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_dashboard_number_person_in_room"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="@string/sample_number_room"
-                            android:textColor="@color/black"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_dashboard_room"
-                            app:layout_constraintStart_toEndOf="@+id/guideline_dashboard_room"
-                            app:layout_constraintTop_toTopOf="@+id/iv_dashboard_room" />
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/ic_baseline_bluetooth_searching"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_dashboard_room_description"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_dashboard_room_description" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textlayout_dashboard_uuid"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="16dp"
-                    android:clickable="@{viewModel.isActiveTextfield()}"
-                    android:focusable="@{viewModel.isActiveTextfield()}"
-                    android:focusableInTouchMode="@{viewModel.isActiveTextfield()}"
-                    android:textColorHint="@color/black"
-                    app:boxStrokeColor="@color/black"
-                    app:expandedHintEnabled="false"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/card_dashboard_detail_room">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_dashboard_uuid"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/uuid"
                         android:inputType="text"
                         android:padding="16dp"
+                        android:drawableStart="@drawable/ic_baseline_bluetooth_searching"
+                        android:drawablePadding="8dp"
                         android:text="@={viewModel.loginPageData.uuid}"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_dashboard_start_stop_advertising"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="16dp"
-                    android:onClick="@{() -> listener.onBluetoothActivityClick()}"
-                    android:text="@{viewModel.bleActionTitle}"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@+id/textlayout_dashboard_uuid"
-                    tools:text="@string/dashboard_stop_bluetooth_activity" />
+                        android:textSize="14sp"
+                        tools:text="0830808022" />
+                </androidx.cardview.widget.CardView>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -219,15 +178,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_view_dashboard_user" />
 
-        <com.airbnb.epoxy.EpoxyRecyclerView
-            android:id="@+id/rv_dashboard_history"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:layoutAnimation="@anim/layout_animation"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="16dp"
+            android:background="@color/grey_f5f5f5"
+            app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_detail_user_description" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_detail_user_description">
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/rv_dashboard_history"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/grey_f5f5f5"
+                android:layoutAnimation="@anim/layout_animation"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_dashboard_detail_user_description"
+                tools:listitem="@layout/epoxy_layout_dashboard_history" />
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

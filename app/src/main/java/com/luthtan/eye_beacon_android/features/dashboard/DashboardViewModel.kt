@@ -4,8 +4,6 @@ import android.accounts.NetworkErrorException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.luthtan.eye_beacon_android.MyApplication
-import com.luthtan.eye_beacon_android.R
 import com.luthtan.eye_beacon_android.base.util.BaseViewModel
 import com.luthtan.eye_beacon_android.base.util.SingleEvents
 import com.luthtan.eye_beacon_android.domain.dtos.BleBody
@@ -27,7 +25,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
-    private val myApplication: MyApplication,
     private val signInRoom: SignInRoom,
     private val insertHistory: InsertHistory,
     private val getHistoryList: GetHistoryList
@@ -38,9 +35,6 @@ class DashboardViewModel @Inject constructor(
 
     private val _bluetoothActivityAction = MutableLiveData<SingleEvents<Boolean>>()
     val bluetoothActivityAction: LiveData<SingleEvents<Boolean>> = _bluetoothActivityAction
-
-    private val _bleActionTitle = MutableLiveData<String>()
-    val bleActionTitle: LiveData<String> = _bleActionTitle
 
     private val _loginPageData = MutableLiveData<LoginPage>()
     val loginPageData: LiveData<LoginPage> = _loginPageData
@@ -74,7 +68,6 @@ class DashboardViewModel @Inject constructor(
     private val stateBleAction = MutableLiveData(false)
 
     init {
-        _bleActionTitle.value = myApplication.getString(R.string.dashboard_stop_bluetooth_activity)
         _storeBeacon.value = mutableListOf()
         _countDown.value = INIT_COUNT_DOWN
         _isActiveTextfield.value = true
@@ -184,20 +177,9 @@ class DashboardViewModel @Inject constructor(
         stateBleAction()
     }
 
-    override fun onBluetoothActivityClick() {
-        stateBleAction.value = !stateBleAction.value!!
-        stateBleAction()
-    }
-
     private fun stateBleAction() {
         loginPageData.value.let {
             _loginPageData.value = it
-        }
-        when (stateBleAction.value!!) {
-            true -> _bleActionTitle.value =
-                myApplication.getString(R.string.dashboard_start_bluetooth_activity)
-            false -> _bleActionTitle.value =
-                myApplication.getString(R.string.dashboard_stop_bluetooth_activity)
         }
         _bluetoothActivityAction.value = SingleEvents(stateBleAction.value!!)
     }

@@ -9,12 +9,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.luthtan.eye_beacon_android.databinding.FragmentRegisterBinding
+import com.luthtan.eye_beacon_android.features.common.makeLinks
 import com.luthtan.eye_beacon_android.features.login.util.PRIVACY_AGREEMENT_TO_REGISTER_REQUEST_KEY
 import com.luthtan.eye_beacon_android.features.login.util.PRIVACY_AGREEMENT_TO_REGISTER_STATE_KEY
 import com.luthtan.eye_beacon_android.features.login.util.REGISTER_TO_LOGIN_LINK
 import com.luthtan.eye_beacon_android.features.login.util.REGISTER_TO_PRIVACY_AGREEMENT_LINK
-import com.luthtan.simplebleproject.common.makeLinks
-import com.luthtan.simplebleproject.data.repository.PreferencesRepository
 
 class RegisterFragment : Fragment(), View.OnClickListener {
 

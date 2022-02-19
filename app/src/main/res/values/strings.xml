@@ -3,7 +3,7 @@
     <string name="title_dashboard_feature">Dashboard Feature</string>
     <string name="title_login_feature">Login Feature</string>
 
-    <string name="eye_beacon_string_logo">eye-beacon</string>
+    <string name="eye_beacon_string_logo">Eye-Beacon</string>
 
 
     <!--    dashboard-->
@@ -56,7 +56,7 @@
     <string name="sample_number_room">5</string>
     <string name="sample_date">17-August-2021</string>
     <string name="sample_time">09.00 AM</string>
-    <string name="sample_item_room_description">You\'re entered in A344</string>
+    <string name="sample_item_room_description">You\'re entered in A</string>
     <string name="title_feature_sample">Feature Sample</string>
     <string name="dashboard_stop_advertising">Stop Advertising</string>
     <string name="dashboard_stop_bluetooth_activity">Stop Bluetooth Activity</string>
@@ -96,4 +96,7 @@
     <string name="dashboard_dialog_stop">STOP</string>
     <string name="dashboard_dialog_title">You are still in room.\nSystem will automatically change your status to Sign In.</string>
     <string name="dashboard_success_msg">Sign in Successfully</string>
+    <string name="position_hard_code">Main Developer</string>
+    <string name="endpoint">Endpoint</string>
+    <string name="mac_address">Mac Address</string>
 </resources>

@@ -23,9 +23,6 @@ class LoginViewModel @Inject constructor() : BaseViewModel(), LoginListener {
     private val _errorForm = MutableLiveData<ErrorLoginForm>()
     val errorForm: LiveData<ErrorLoginForm> = _errorForm
 
-    private val _hideProgress = MutableLiveData(true)
-    val hideProgress: LiveData<Boolean> = _hideProgress
-
     init {
         _errorForm.value = ErrorLoginForm()
     }
@@ -73,7 +70,4 @@ class LoginViewModel @Inject constructor() : BaseViewModel(), LoginListener {
         }
     }
 
-    fun setProgressLoading(state: Boolean) {
-        _hideProgress.value = state
-    }
 }
